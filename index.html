@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elemental Analytics | Pro Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+        
+        :root {
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --primary-glow: #a855f7;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #020617; 
+            color: white; 
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        /* --- Charming Background Animation --- */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-size: 200% 200%;
+            animation: aurora 15s ease infinite alternate;
+        }
+
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
+            animation: floatOrb 20s infinite ease-in-out;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #ec4899; top: -100px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 500px; height: 500px; background: #3b82f6; bottom: -150px; right: -150px; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: #8b5cf6; top: 40%; left: 40%; animation-delay: -10s; }
+
+        @keyframes aurora { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes floatOrb { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 20px); } }
+
+        /* --- Premium Glass Cards --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Trait Buttons --- */
+        .trait-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+        }
+        
+        .trait-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .trait-selected {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2)) !important;
+            border: 1px solid #d8b4fe !important;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        .trait-selected::after {
+            content: '✨'; position: absolute; top: 5px; right: 5px; font-size: 12px;
+        }
+
+        /* --- Pop Outward Animation --- */
+        @keyframes popOutward {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15) translateY(-10px); box-shadow: 0 30px 60px rgba(168, 85, 247, 0.6); z-index: 50; border-color: #fff; }
+            100% { transform: scale(1); z-index: auto; }
+        }
+
+        .animate-pop {
+            animation: popOutward 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* --- Input Styling --- */
+        .cosmic-input {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            width: 100%;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .cosmic-input:focus {
+            border-color: #d8b4fe;
+            box-shadow: 0 0 15px rgba(216, 180, 254, 0.3);
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* --- Utils --- */
+        .urdu { font-family: 'Noto Nastaliq Urdu', serif; line-height: 1.8; }
+        .text-glow { text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
+        .stagger-1 { animation-delay: 0.1s; } .stagger-2 { animation-delay: 0.2s; } .stagger-3 { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 selection:bg-pink-500 selection:text-white">
+
+    <div class="aurora-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="max-w-6xl w-full relative z-10">
+        
+        <!-- Header -->
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-5xl md:text-7xl font-black mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 text-glow">
+                Soul Elements
+            </h1>
+            <p class="text-indigo-200/80 text-lg md:text-xl font-light tracking-widest uppercase">Advanced Personality Matrix</p>
+        </header>
+
+        <!-- VIEW 1: TRAIT SELECTION -->
+        <main id="quiz-view" class="glass-panel rounded-[2rem] p-8 md:p-12 fade-in stagger-1">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 border-b border-white/10 pb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">Identify Your Essence</h2>
+                    <p class="text-indigo-200/70">Step 1: Tap the cards that resonate with your inner self.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <span id="counter" class="block text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">0</span>
+                        <span class="text-xs uppercase tracking-widest text-indigo-300">Traits</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="trait-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-12">
+                <!-- JS will inject cards here -->
+            </div>
+
+            <button onclick="goToDateView()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                <span class="relative z-10 text-white flex items-center justify-center gap-2">
+                    Next: Cosmic Alignment <span class="group-hover:translate-x-1 transition-transform">→</span>
+                </span>
+            </button>
+        </main>
+
+        <!-- VIEW 2: DATE SELECTION -->
+        <main id="date-view" class="hidden glass-panel rounded-[2rem] p-8 md:p-12 fade-in max-w-2xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">When did your journey begin?</h2>
+            <p class="text-indigo-200/70 mb-10">Step 2: Enter your birth date.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                <div class="text-left">
+                    <label class="block text-indigo-300 text-sm font-bold uppercase tracking-wider mb-2">Month</label>
+                    <select id="birth-month" class="cosmic-input">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="text-left">
+                    <label class="block text-indigo-300 text-sm font-bold uppercase tracking-wider mb-2">Day</label>
+                    <input type="number" id="birth-day" min="1" max="31" placeholder="e.g. 18" class="cosmic-input">
+                </div>
+            </div>
+
+            <button onclick="goToNameView()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <span class="relative z-10 text-white flex items-center justify-center gap-2">
+                    Continue <span class="group-hover:translate-x-1 transition-transform">→</span>
+                </span>
+            </button>
+            <button onclick="backToQuiz()" class="mt-6 text-sm text-indigo-400 hover:text-white underline">Back to Traits</button>
+        </main>
+
+        <!-- VIEW 3: NAME INPUT (ABJAD) -->
+        <main id="name-view" class="hidden glass-panel rounded-[2rem] p-8 md:p-12 fade-in max-w-2xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-4">The Final Key</h2>
+            <p class="text-indigo-200/70 mb-10">Step 3: Enter your name in Urdu to unlock your numeric signature.</p>
+            
+            <div class="mb-12">
+                <input type="text" id="user-name" placeholder="e.g. مزمل محمود" class="cosmic-input text-center text-4xl py-6">
+                <p class="text-xs text-indigo-400 mt-4">Calculates Abjad Value automatically</p>
+            </div>
+
+            <button onclick="revealDestiny()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
+                <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                <span class="relative z-10 text-white flex items-center justify-center gap-2">
+                    Reveal Full Analysis <span class="group-hover:scale-110 transition-transform">✨</span>
+                </span>
+            </button>
+            <button onclick="backToDate()" class="mt-6 text-sm text-indigo-400 hover:text-white underline">Back to Date</button>
+        </main>
+
+        <!-- VIEW 4: RESULTS -->
+        <main id="result-view" class="hidden space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Main Element Card -->
+                <div class="lg:col-span-8 glass-panel rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden fade-in">
+                    <div id="winner-glow" class="absolute top-0 right-0 w-96 h-96 bg-purple-500/30 blur-[120px] rounded-full pointer-events-none"></div>
+
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-8">
+                            <div>
+                                <span class="text-sm font-bold uppercase tracking-[0.3em] text-indigo-300 mb-2 block">Elemental Core</span>
+                                <h2 id="winner-name" class="text-6xl md:text-7xl font-black text-white mb-2 tracking-tight"></h2>
+                                <p id="winner-urdu" class="urdu text-2xl text-pink-300"></p>
+                            </div>
+                            <div id="winner-icon" class="text-8xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] animate-pulse"></div>
+                        </div>
+
+                        <!-- Qualities -->
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-indigo-500/10 p-5 rounded-xl border border-indigo-500/20">
+                                <h4 class="text-indigo-300 font-bold text-xs uppercase mb-2">Strengths</h4>
+                                <p id="qualities-text" class="text-indigo-50 text-sm leading-relaxed"></p>
+                            </div>
+                            <div class="bg-pink-500/10 p-5 rounded-xl border border-pink-500/20">
+                                <h4 class="text-pink-300 font-bold text-xs uppercase mb-2">Challenges</h4>
+                                <p id="challenges-text" class="text-pink-50 text-sm leading-relaxed"></p>
+                            </div>
+                        </div>
+
+                        <!-- Best Match Badge -->
+                        <div class="mt-6 bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <span class="text-indigo-200 text-xs font-bold uppercase tracking-widest block mb-1">Soulmate Synergy</span>
+                                <p class="text-sm text-indigo-200/60">Your energy balances perfectly with:</p>
+                            </div>
+                            <div class="text-right">
+                                <span id="best-match" class="text-2xl font-black text-white text-glow"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zodiac & Chart Column -->
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <!-- Zodiac Card -->
+                    <div class="glass-panel rounded-[2.5rem] p-8 relative fade-in stagger-1 border border-yellow-500/30 bg-yellow-900/10">
+                        <span class="text-xs font-bold uppercase tracking-[0.2em] text-yellow-200 mb-4 block">Astral Signature</span>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span id="zodiac-icon" class="text-5xl"></span>
+                            <div>
+                                <h3 id="zodiac-name" class="text-3xl font-black text-white"></h3>
+                                <p id="zodiac-date" class="text-xs text-yellow-200/60 font-mono"></p>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div>
+                                <p class="text-[10px] uppercase text-yellow-500 font-bold">Personality</p>
+                                <p id="zodiac-personality" class="text-sm text-yellow-100 leading-tight"></p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase text-yellow-500 font-bold">Singing Style 🎤</p>
+                                <p id="zodiac-singing" class="text-sm text-yellow-100 leading-tight"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="glass-panel rounded-[2.5rem] p-6 flex flex-col items-center justify-center relative fade-in stagger-2">
+                        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-indigo-200 mb-4">Balance</h3>
+                        <div class="w-full h-40 relative">
+                            <canvas id="elementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABJAD RESULT SECTION -->
+            <div id="abjad-result" class="glass-panel rounded-[2.5rem] p-8 mt-6 fade-in stagger-3 border border-emerald-500/30 relative overflow-hidden">
+                 <div class="absolute inset-0 bg-gradient-to-r from-emerald-900/20 to-teal-900/20 z-0"></div>
+                 <div class="relative z-10">
+                     <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                         <div class="text-center md:text-left">
+                             <span class="text-emerald-300 text-xs font-bold uppercase tracking-[0.3em] block mb-2">Ilm-ul-Ramal Analysis</span>
+                             <h3 class="text-3xl font-bold text-white mb-1">Spiritual Geometry</h3>
+                             <p class="text-emerald-200/60 text-sm">Based on the numeric value of <span id="abjad-input-name" class="font-bold text-white"></span></p>
+                         </div>
+                         
+                         <div class="flex items-center gap-6">
+                            <div class="text-center">
+                                <span class="block text-4xl font-black text-emerald-400" id="abjad-sum">0</span>
+                                <span class="text-[10px] uppercase text-emerald-600 font-bold">Total Value</span>
+                            </div>
+                         </div>
+                     </div>
+
+                     <div class="mt-8 bg-black/20 rounded-2xl p-6 border border-emerald-500/10">
+                         <h4 class="text-center text-sm font-bold uppercase text-emerald-300 mb-6 tracking-widest">--- Matching Divine Attribute ---</h4>
+                         <div id="abjad-matches" class="text-center space-y-2">
+                             <!-- Matches injected here -->
+                         </div>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="text-center py-16 fade-in stagger-3 relative z-10">
+                <div class="group cursor-default">
+                    <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 drop-shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.6)]">
+                        Muzammil Mahmood
+                        <span class="text-white/20 mx-2 font-light">&</span>
+                        Saqib Zahid
+                    </h1>
+                    <p class="text-indigo-200/50 text-xs font-bold uppercase tracking-[0.4em] mt-4">Architects of Reality</p>
+                </div>
+                <button onclick="resetApp()" class="mt-8 text-xs text-indigo-400 hover:text-white underline uppercase tracking-widest">Restart System</button>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const elements = {
+            Fire: { urdu: "آتشی (Agni)", color: '#f43f5e', icon: '🔥', qualities: "Visionary, intense energy, magnetic leadership (قیادت، بھرپور توانائی)", challenges: "Impulsiveness, stubbornness, burnout risk (جلد بازی، ضدی)", match: "Air 🌪️" },
+            Air: { urdu: "ہوائی (Hawa)", color: '#fbbf24', icon: '🌪️', qualities: "Intellectual, adaptable, socially brilliant (ذہین، ملنسار)", challenges: "Inconsistency, lack of focus, easily bored (غیر مستقل)", match: "F
