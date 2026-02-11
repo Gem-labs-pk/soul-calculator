@@ -3,349 +3,941 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elemental Analytics | Pro Edition</title>
+    <title>Soul Calculator | Sweet Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+        /* Added Cinzel for the stylish names */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Outfit:wght@300;400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
         
         :root {
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --primary-glow: #a855f7;
+            /* Sweet Color Palette */
+            --bg-dark: #0f0c29;
+            --bg-mid: #302b63;
+            --bg-light: #24243e;
+            --glass-surface: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            /* Gradient Colors for Text */
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bd00ff;
+            --neon-pink: #ff0055;
+            --neon-yellow: #ffe600;
+            --gold-border: #D4AF37;
+            --premium-gold: #FFD700;
         }
 
         body { 
-            font-family: 'Outfit', sans-serif; 
-            background: #020617; 
-            color: white; 
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark); 
+            color: #e5e5e5; 
             overflow-x: hidden;
             perspective: 1000px;
         }
 
-        /* --- Charming Background Animation --- */
-        .aurora-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
-            background: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            background-size: 200% 200%;
-            animation: aurora 15s ease infinite alternate;
+        .stylish-font { font-family: 'Cinzel Decorative', serif; }
+
+        .urdu { 
+            font-family: 'Noto Nastaliq Urdu', serif; 
+            line-height: 2.2; 
+            padding-bottom: 5px;
+        }
+        .urdu-input {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            line-height: 2.5;
+            padding-top: 15px;
+            padding-bottom: 10px;
+            height: 80px;
         }
 
-        .orb {
-            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
-            animation: floatOrb 20s infinite ease-in-out;
-        }
-        .orb-1 { width: 400px; height: 400px; background: #ec4899; top: -100px; left: -100px; animation-delay: 0s; }
-        .orb-2 { width: 500px; height: 500px; background: #3b82f6; bottom: -150px; right: -150px; animation-delay: -5s; }
-        .orb-3 { width: 300px; height: 300px; background: #8b5cf6; top: 40%; left: 40%; animation-delay: -10s; }
-
-        @keyframes aurora { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-        @keyframes floatOrb { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 20px); } }
-
-        /* --- Premium Glass Cards --- */
-        .glass-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        /* --- Trait Buttons --- */
-        .trait-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-            position: relative; overflow: hidden;
-            transform-style: preserve-3d;
+        /* --- Sweet Background --- */
+        .cosmic-void {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e);
         }
         
-        .trait-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            border-color: rgba(255,255,255,0.3);
+        .nebula {
+            position: absolute; width: 100vw; height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(189, 0, 255, 0.2), transparent 40%), 
+                radial-gradient(circle at 80% 70%, rgba(0, 243, 255, 0.2), transparent 40%);
+            filter: blur(60px);
+            animation: colorShift 8s infinite alternate;
         }
 
-        .trait-selected {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2)) !important;
-            border: 1px solid #d8b4fe !important;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 0 10px rgba(168, 85, 247, 0.2);
+        @keyframes colorShift {
+            0% { opacity: 0.6; }
+            100% { opacity: 0.9; }
         }
 
-        .trait-selected::after {
-            content: '✨'; position: absolute; top: 5px; right: 5px; font-size: 12px;
+        /* --- Animated Colored Headings --- */
+        .text-fancy {
+            background: linear-gradient(270deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink), var(--neon-yellow));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 4s ease infinite;
+        }
+        
+        /* Premium Gold Gradient Text */
+        .text-gold-premium {
+            background: linear-gradient(to bottom, #FFD700, #FDB931, #9E7D28, #FDB931, #FFD700);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* --- Pop Outward Animation --- */
-        @keyframes popOutward {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15) translateY(-10px); box-shadow: 0 30px 60px rgba(168, 85, 247, 0.6); z-index: 50; border-color: #fff; }
-            100% { transform: scale(1); z-index: auto; }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .animate-pop {
-            animation: popOutward 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* --- Modern Glass Cards --- */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease;
         }
 
-        /* --- Input Styling --- */
-        .cosmic-input {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 1rem;
-            border-radius: 1rem;
-            width: 100%;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
-            outline: none;
+        /* --- Inputs --- */
+        .input-group { position: relative; margin-bottom: 2rem; }
+        .fashion-input {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            padding: 1rem 0; color: white; font-size: 1.2rem;
+            font-family: 'Outfit', sans-serif; outline: none;
             transition: all 0.3s;
         }
-        .cosmic-input:focus {
-            border-color: #d8b4fe;
-            box-shadow: 0 0 15px rgba(216, 180, 254, 0.3);
-            background: rgba(0,0,0,0.5);
+        .fashion-input:focus { 
+            border-image: linear-gradient(to right, var(--neon-cyan), var(--neon-purple)); 
+            border-image-slice: 1;
+        }
+        .fashion-label {
+            position: absolute; top: 1rem; left: 0; width: 100%;
+            color: rgba(255,255,255,0.5); text-transform: uppercase;
+            font-size: 0.8rem; letter-spacing: 0.1em; pointer-events: none;
+            transition: all 0.3s; font-weight: 600;
+        }
+        .fashion-input:focus ~ .fashion-label,
+        .fashion-input:not(:placeholder-shown) ~ .fashion-label {
+            top: -1.2rem; color: var(--neon-cyan); font-size: 0.7rem; letter-spacing: 0.2em;
         }
 
-        /* --- Utils --- */
-        .urdu { font-family: 'Noto Nastaliq Urdu', serif; line-height: 1.8; }
-        .text-glow { text-shadow: 0 0 20px rgba(255,255,255,0.3); }
-        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
-        .stagger-1 { animation-delay: 0.1s; } .stagger-2 { animation-delay: 0.2s; } .stagger-3 { animation-delay: 0.3s; }
+        /* --- HIGHLY ANIMATED BUTTONS --- */
+        .btn-fancy {
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            border: none;
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.1s ease; /* Faster transition for touch response */
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
 
+        /* Animated Border Gradient */
+        .btn-fancy::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 0.75rem; 
+            padding: 2px; 
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink), var(--neon-yellow));
+            background-size: 400% 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderRun 3s linear infinite;
+            z-index: -1;
+        }
+
+        /* Hover Shine Effect */
+        .btn-fancy::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .btn-fancy:hover {
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+            background: rgba(0, 243, 255, 0.1);
+        }
+        
+        /* Active / Touch Animation */
+        .btn-fancy:active {
+            transform: scale(0.95); /* Shrink on click/touch */
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+        }
+        
+        .btn-fancy:hover::after {
+            left: 100%;
+        }
+
+        @keyframes borderRun {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Trait Cards --- */
+        .trait-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .trait-card:hover {
+            border-color: var(--neon-purple);
+            background: rgba(189, 0, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        .trait-selected {
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.3), rgba(0, 243, 255, 0.1)) !important;
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2) !important;
+        }
+
+        /* --- Animations --- */
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        
+        /* Processing Orb */
+        .processing-orb {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--neon-cyan), transparent);
+            filter: blur(10px);
+            animation: orbSpin 1.5s linear infinite;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        .processing-orb::after {
+            content: ''; position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid var(--neon-purple);
+            border-top-color: transparent;
+            animation: spinReverse 1s linear infinite;
+        }
+        @keyframes orbSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+
+        /* --- Side Menu Styles --- */
+        #side-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(-100%);
+        }
+        #side-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Accordion Styles */
+        .menu-header {
+            cursor: pointer;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+        .menu-header:hover {
+            color: var(--neon-cyan);
+        }
+        .menu-header span {
+            transition: transform 0.3s;
+        }
+        .menu-header.active span {
+            transform: rotate(45deg);
+            color: var(--neon-cyan);
+        }
+        .menu-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s;
+            opacity: 0;
+        }
+        .menu-content.open {
+            max-height: 300px; /* Arbitrary large height */
+            opacity: 1;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
         .hidden { display: none; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 selection:bg-pink-500 selection:text-white">
+<body class="flex flex-col items-center justify-center min-h-screen p-6 overflow-x-hidden">
 
-    <div class="aurora-bg"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+    <div class="cosmic-void"></div>
+    <div class="nebula"></div>
 
-    <div class="max-w-6xl w-full relative z-10">
-        
-        <!-- Header -->
-        <header class="text-center mb-12 fade-in">
-            <h1 class="text-5xl md:text-7xl font-black mb-2 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 text-glow">
-                Soul Elements
-            </h1>
-            <p class="text-indigo-200/80 text-lg md:text-xl font-light tracking-widest uppercase">Advanced Personality Matrix</p>
-        </header>
+    <!-- Menu Button (Corner Docked) -->
+    <button onclick="toggleMenu()" class="fixed top-0 left-0 z-50 w-16 h-16 flex items-center justify-center border-r border-b border-white/10 bg-black/20 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-[#00f3ff] group cursor-pointer shadow-2xl rounded-br-3xl">
+        <div class="grid grid-cols-2 gap-1.5">
+            <div class="w-1.5 h-1.5 bg-white/70 group-hover:bg-[#00f3ff] transition-colors shadow-[0_0_5px_rgba(255,255,255,0.5)]"></div>
+            <div class="w-1.5 h-1.5 bg-white/70 group-hover:bg-[#00f3ff] transition-colors shadow-[0_0_5px_rgba(255,255,255,0.5)]"></div>
+            <div class="w-1.5 h-1.5 bg-white/70 group-hover:bg-[#00f3ff] transition-colors shadow-[0_0_5px_rgba(255,255,255,0.5)]"></div>
+            <div class="w-1.5 h-1.5 bg-white/70 group-hover:bg-[#00f3ff] transition-colors shadow-[0_0_5px_rgba(255,255,255,0.5)]"></div>
+        </div>
+    </button>
 
-        <!-- VIEW 1: TRAIT SELECTION -->
-        <main id="quiz-view" class="glass-panel rounded-[2rem] p-8 md:p-12 fade-in stagger-1">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 border-b border-white/10 pb-6">
-                <div>
-                    <h2 class="text-3xl font-bold text-white mb-2">Identify Your Essence</h2>
-                    <p class="text-indigo-200/70">Step 1: Tap the cards that resonate with your inner self.</p>
+    <!-- Side Menu with Accordion -->
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-80 bg-[#0f0c29]/95 backdrop-blur-xl border-r border-white/10 z-40 p-8 shadow-2xl overflow-y-auto">
+        <div class="flex justify-between items-center mb-10 pt-10">
+            <h2 class="text-xl font-bold text-fancy tracking-widest">INFO</h2>
+            <button onclick="toggleMenu()" class="text-white/50 hover:text-white text-2xl">&times;</button>
+        </div>
+
+        <div class="space-y-2">
+            <!-- Section 1 -->
+            <div>
+                <div class="menu-header" onclick="toggleAccordion(this)">
+                    <h3 class="text-[#00f3ff] text-xs font-bold uppercase tracking-[0.2em]">Details</h3>
+                    <span class="text-white text-xl font-light">+</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
-                        <span id="counter" class="block text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">0</span>
-                        <span class="text-xs uppercase tracking-widest text-indigo-300">Traits</span>
+                <div class="menu-content">
+                    <p class="text-sm text-white/70 leading-relaxed font-light">
+                        “Soul Elements is a premium profiling ritual. It merges Elemental Traits, Zodiac Astrology, and Abjad Numerology into a high-graphic, 3D animated experience to reveal your complete spiritual and personality matrix.”
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div>
+                <div class="menu-header" onclick="toggleAccordion(this)">
+                    <h3 class="text-[#bd00ff] text-xs font-bold uppercase tracking-[0.2em]">Architecture Details</h3>
+                    <span class="text-white text-xl font-light">+</span>
+                </div>
+                <div class="menu-content">
+                    <div class="space-y-1">
+                        <p class="text-white font-bold text-lg stylish-font text-gold-premium">Muzammil Mahmood</p>
+                        <p class="text-sm text-white/60">Software Engineer</p>
+                        <p class="text-xs text-white/40 uppercase tracking-wider mt-2">Islamia University of Bahawalpur</p>
                     </div>
                 </div>
             </div>
 
-            <div id="trait-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mb-12">
-                <!-- JS will inject cards here -->
+            <!-- Section 3 -->
+            <div>
+                <div class="menu-header" onclick="toggleAccordion(this)">
+                    <h3 class="text-[#ff0055] text-xs font-bold uppercase tracking-[0.2em]">Contact</h3>
+                    <span class="text-white text-xl font-light">+</span>
+                </div>
+                <div class="menu-content">
+                    <!-- Added break-all to ensure email wraps properly -->
+                    <a href="mailto:muzammilmahmood47@gmail.com" class="text-sm text-white/70 hover:text-[#00f3ff] transition-colors break-all block">
+                        muzammilmahmood47@gmail.com
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-8 left-8 text-white/20 text-[10px] uppercase tracking-widest">
+            System V.2.0
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="absolute top-8 text-center z-20 pointer-events-none">
+        <p class="text-[10px] uppercase tracking-[0.5em] text-white/50 mb-2">System V.2.0</p>
+        <h1 class="text-4xl md:text-6xl font-black tracking-tight text-fancy drop-shadow-2xl">SOUL CALCULATOR</h1>
+    </header>
+
+    <div class="max-w-5xl w-full relative z-10 mt-24">
+
+        <!-- 0. REGISTRATION -->
+        <main id="intro-view" class="luxury-card rounded-3xl p-10 md:p-16 max-w-xl mx-auto fade-in text-center">
+            <h2 class="text-3xl mb-2 font-bold text-fancy">Access Matrix</h2>
+            <p class="text-white/60 text-sm mb-12">Verify identity to initialize sequence.</p>
+
+            <div class="text-left space-y-6">
+                <div class="input-group">
+                    <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
+                    <label class="fashion-label">Agent Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="reg-email" class="fashion-input" placeholder=" ">
+                    <label class="fashion-label">Gmail Account</label>
+                </div>
             </div>
 
-            <button onclick="goToDateView()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
-                <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
-                <span class="relative z-10 text-white flex items-center justify-center gap-2">
-                    Next: Cosmic Alignment <span class="group-hover:translate-x-1 transition-transform">→</span>
-                </span>
-            </button>
+            <button onclick="goToIntro()" class="btn-fancy w-full py-5 rounded-xl mt-10 text-sm">Initialize</button>
         </main>
 
-        <!-- VIEW 2: DATE SELECTION -->
-        <main id="date-view" class="hidden glass-panel rounded-[2rem] p-8 md:p-12 fade-in max-w-2xl mx-auto text-center">
-            <h2 class="text-4xl font-bold text-white mb-4">When did your journey begin?</h2>
-            <p class="text-indigo-200/70 mb-10">Step 2: Enter your birth date.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <!-- 1. TRAITS -->
+        <main id="quiz-view" class="hidden luxury-card p-8 md:p-12 fade-in">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl mb-4 font-bold text-fancy">Select Core Data</h2>
+                <p class="text-white/60 text-xs tracking-[0.2em] uppercase mt-4">Select 3+ Traits</p>
+            </div>
+
+            <div id="trait-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-12"></div>
+
+            <div class="flex justify-between items-center border-t border-white/10 pt-8">
                 <div class="text-left">
-                    <label class="block text-indigo-300 text-sm font-bold uppercase tracking-wider mb-2">Month</label>
-                    <select id="birth-month" class="cosmic-input">
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
+                    <span class="text-xs text-white/40 uppercase tracking-widest">Cached</span>
+                    <span id="counter" class="block text-3xl font-bold text-fancy">0</span>
+                </div>
+                <button onclick="goToDateView()" class="btn-fancy px-12 py-4 rounded-xl">Proceed</button>
+            </div>
+        </main>
+
+        <!-- 2. DATE -->
+        <main id="date-view" class="hidden luxury-card p-10 md:p-16 max-w-2xl mx-auto text-center fade-in">
+            <h2 class="text-3xl mb-2 font-bold text-fancy">Temporal Lock</h2>
+            <p class="text-white/60 text-sm mb-12 uppercase tracking-widest">Input Birth Coordinates</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="text-left">
+                    <span class="text-xs text-[#00f3ff] uppercase tracking-widest mb-2 block">Month</span>
+                    <select id="birth-month" class="fashion-input bg-transparent">
+                        <option value="1" class="text-black">January</option>
+                        <option value="2" class="text-black">February</option>
+                        <option value="3" class="text-black">March</option>
+                        <option value="4" class="text-black">April</option>
+                        <option value="5" class="text-black">May</option>
+                        <option value="6" class="text-black">June</option>
+                        <option value="7" class="text-black">July</option>
+                        <option value="8" class="text-black">August</option>
+                        <option value="9" class="text-black">September</option>
+                        <option value="10" class="text-black">October</option>
+                        <option value="11" class="text-black">November</option>
+                        <option value="12" class="text-black">December</option>
                     </select>
                 </div>
                 <div class="text-left">
-                    <label class="block text-indigo-300 text-sm font-bold uppercase tracking-wider mb-2">Day</label>
-                    <input type="number" id="birth-day" min="1" max="31" placeholder="e.g. 18" class="cosmic-input">
+                    <div class="input-group mb-0">
+                        <input type="number" id="birth-day" class="fashion-input" placeholder=" " min="1" max="31">
+                        <label class="fashion-label">Day (01-31)</label>
+                    </div>
                 </div>
             </div>
 
-            <button onclick="goToNameView()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
-                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-                <span class="relative z-10 text-white flex items-center justify-center gap-2">
-                    Continue <span class="group-hover:translate-x-1 transition-transform">→</span>
-                </span>
-            </button>
-            <button onclick="backToQuiz()" class="mt-6 text-sm text-indigo-400 hover:text-white underline">Back to Traits</button>
+            <div class="flex gap-4 justify-center">
+                <button onclick="backToQuiz()" class="text-white/40 hover:text-white text-xs uppercase tracking-widest transition-colors px-6">Back</button>
+                <button onclick="goToNameView()" class="btn-fancy px-12 py-4 rounded-xl">Next Phase</button>
+            </div>
         </main>
 
-        <!-- VIEW 3: NAME INPUT (ABJAD) -->
-        <main id="name-view" class="hidden glass-panel rounded-[2rem] p-8 md:p-12 fade-in max-w-2xl mx-auto text-center">
-            <h2 class="text-4xl font-bold text-white mb-4">The Final Key</h2>
-            <p class="text-indigo-200/70 mb-10">Step 3: Enter your name in Urdu to unlock your numeric signature.</p>
+        <!-- 3. URDU NAME -->
+        <main id="name-view" class="hidden luxury-card p-10 md:p-16 max-w-2xl mx-auto text-center fade-in">
+            <h2 class="text-3xl mb-2 font-bold text-fancy">Spiritual Key</h2>
+            <p class="text-white/60 text-sm mb-12 uppercase tracking-widest">Type Name in Urdu for Abjad Analysis</p>
             
-            <div class="mb-12">
-                <input type="text" id="user-name" placeholder="e.g. مزمل محمود" class="cosmic-input text-center text-4xl py-6">
-                <p class="text-xs text-indigo-400 mt-4">Calculates Abjad Value automatically</p>
+            <div class="mb-12 relative max-w-md mx-auto">
+                <div class="input-group">
+                    <input type="text" id="user-name-urdu" class="fashion-input text-center text-4xl urdu-input" placeholder=" " dir="rtl" oninput="updateLiveCalc(this.value)">
+                    <label class="fashion-label text-center w-full" style="left:0">e.g. مزمل محمود</label>
+                </div>
+                <p id="live-calc-preview" class="text-[#00f3ff] text-xs uppercase tracking-widest mt-2 opacity-0 transition-opacity">
+                    Value: <span id="live-score">0</span>
+                </p>
             </div>
 
-            <button onclick="revealDestiny()" class="group relative w-full py-6 rounded-2xl overflow-hidden font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99]">
-                <div class="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-                <span class="relative z-10 text-white flex items-center justify-center gap-2">
-                    Reveal Full Analysis <span class="group-hover:scale-110 transition-transform">✨</span>
-                </span>
-            </button>
-            <button onclick="backToDate()" class="mt-6 text-sm text-indigo-400 hover:text-white underline">Back to Date</button>
+            <div class="flex gap-4 justify-center">
+                <button onclick="backToDate()" class="text-white/40 hover:text-white text-xs uppercase tracking-widest transition-colors px-6">Back</button>
+                <button onclick="startProcessing()" class="btn-fancy px-12 py-4 rounded-xl w-full md:w-auto">Reveal Destiny</button>
+            </div>
         </main>
 
-        <!-- VIEW 4: RESULTS -->
-        <main id="result-view" class="hidden space-y-6">
+        <!-- 3.5 PROCESSING -->
+        <main id="processing-view" class="hidden luxury-card p-16 max-w-xl mx-auto text-center fade-in">
+            <div class="processing-orb"></div>
+            <h2 id="process-text" class="text-2xl font-bold text-white mb-2 animate-pulse">Aligning Stars...</h2>
+            <p class="text-white/40 text-xs uppercase tracking-[0.3em]">Please Wait</p>
+        </main>
+
+        <!-- 4. RESULTS -->
+        <main id="result-view" class="hidden space-y-8 pb-20 fade-in">
             
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- User Header -->
+            <div class="text-center mb-10">
+                <p class="text-[#00f3ff] text-[10px] font-bold uppercase tracking-[0.6em] mb-2">Analysis Complete For</p>
+                <h2 id="final-user-name" class="text-4xl font-bold text-white tracking-tight"></h2>
+                <!-- Added break-all to result view email as well -->
+                <p id="final-user-email" class="text-white/30 text-sm mt-1 font-mono uppercase tracking-widest break-all"></p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
                 <!-- Main Element Card -->
-                <div class="lg:col-span-8 glass-panel rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden fade-in">
-                    <div id="winner-glow" class="absolute top-0 right-0 w-96 h-96 bg-purple-500/30 blur-[120px] rounded-full pointer-events-none"></div>
+                <div class="lg:col-span-8 luxury-card p-8 md:p-12 relative overflow-hidden">
+                    <div id="element-glow" class="absolute -top-32 -right-32 w-96 h-96 bg-purple-600/30 blur-[120px] rounded-full pointer-events-none"></div>
 
                     <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-8">
-                            <div>
-                                <span class="text-sm font-bold uppercase tracking-[0.3em] text-indigo-300 mb-2 block">Elemental Core</span>
-                                <h2 id="winner-name" class="text-6xl md:text-7xl font-black text-white mb-2 tracking-tight"></h2>
-                                <p id="winner-urdu" class="urdu text-2xl text-pink-300"></p>
+                        <!-- Holy Name Display -->
+                        <div class="relative text-center mb-12 p-8 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#302b63] px-6 py-1 rounded-full border border-white/20">
+                                <span class="text-fancy text-[10px] font-bold uppercase tracking-[0.4em]">My Holy Name</span>
                             </div>
-                            <div id="winner-icon" class="text-8xl filter drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] animate-pulse"></div>
+                            <h1 id="display-name" class="text-5xl md:text-7xl font-bold text-white urdu drop-shadow-2xl py-2"></h1>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center md:items-start justify-between mb-10 gap-6 text-center md:text-left">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-[0.3em] text-[#00f3ff] mb-2 block">Dominant Element</span>
+                                <h2 id="winner-name" class="text-5xl md:text-7xl font-bold mb-2 text-fancy"></h2>
+                                <p id="winner-urdu" class="urdu text-2xl text-white/60"></p>
+                            </div>
+                            <div id="winner-icon" class="text-8xl animate-pulse filter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
                         </div>
 
                         <!-- Qualities -->
-                        <div class="grid md:grid-cols-2 gap-4 mb-6">
-                            <div class="bg-indigo-500/10 p-5 rounded-xl border border-indigo-500/20">
-                                <h4 class="text-indigo-300 font-bold text-xs uppercase mb-2">Strengths</h4>
-                                <p id="qualities-text" class="text-indigo-50 text-sm leading-relaxed"></p>
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="p-6 border border-white/5 bg-white/[0.02] rounded-2xl">
+                                <h4 class="text-[#00f3ff] font-bold text-xs uppercase mb-3 tracking-widest border-b border-white/10 pb-2">Strengths</h4>
+                                <p id="qualities-text" class="text-white/80 text-sm leading-relaxed font-medium"></p>
                             </div>
-                            <div class="bg-pink-500/10 p-5 rounded-xl border border-pink-500/20">
-                                <h4 class="text-pink-300 font-bold text-xs uppercase mb-2">Challenges</h4>
-                                <p id="challenges-text" class="text-pink-50 text-sm leading-relaxed"></p>
+                            <div class="p-6 border border-white/5 bg-white/[0.02] rounded-2xl">
+                                <h4 class="text-[#ff0055] font-bold text-xs uppercase mb-3 tracking-widest border-b border-white/10 pb-2">Challenges</h4>
+                                <p id="challenges-text" class="text-white/80 text-sm leading-relaxed font-medium"></p>
                             </div>
                         </div>
 
-                        <!-- Best Match Badge -->
-                        <div class="mt-6 bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div>
-                                <span class="text-indigo-200 text-xs font-bold uppercase tracking-widest block mb-1">Soulmate Synergy</span>
-                                <p class="text-sm text-indigo-200/60">Your energy balances perfectly with:</p>
-                            </div>
-                            <div class="text-right">
-                                <span id="best-match" class="text-2xl font-black text-white text-glow"></span>
-                            </div>
+                        <!-- Match -->
+                        <div class="bg-gradient-to-r from-purple-900/20 to-transparent border-l-4 border-purple-500 p-6 rounded-r-xl">
+                            <span class="text-purple-400 text-[10px] font-bold uppercase tracking-widest block mb-1">Soulmate Synergy</span>
+                            <span id="best-match" class="text-2xl text-white font-bold"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Zodiac & Chart Column -->
-                <div class="lg:col-span-4 space-y-6">
-                    
-                    <!-- Zodiac Card -->
-                    <div class="glass-panel rounded-[2.5rem] p-8 relative fade-in stagger-1 border border-yellow-500/30 bg-yellow-900/10">
-                        <span class="text-xs font-bold uppercase tracking-[0.2em] text-yellow-200 mb-4 block">Astral Signature</span>
-                        <div class="flex items-center gap-4 mb-4">
-                            <span id="zodiac-icon" class="text-5xl"></span>
+                <!-- Side Panel: Zodiac & Chart -->
+                <div class="lg:col-span-4 space-y-8">
+                    <div class="luxury-card p-8 border-t-4 border-t-[#00f3ff]">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 mb-6 block">Astral Signature</span>
+                        <div class="flex items-center gap-4 mb-6">
+                            <span id="zodiac-icon" class="text-5xl text-[#00f3ff]"></span>
                             <div>
-                                <h3 id="zodiac-name" class="text-3xl font-black text-white"></h3>
-                                <p id="zodiac-date" class="text-xs text-yellow-200/60 font-mono"></p>
+                                <h3 id="zodiac-name" class="text-2xl font-bold text-fancy"></h3>
+                                <p id="zodiac-date" class="text-[10px] text-[#00f3ff] uppercase tracking-widest"></p>
                             </div>
                         </div>
-                        <div class="space-y-3">
+                        <div class="space-y-6">
                             <div>
-                                <p class="text-[10px] uppercase text-yellow-500 font-bold">Personality</p>
-                                <p id="zodiac-personality" class="text-sm text-yellow-100 leading-tight"></p>
+                                <p class="text-[9px] uppercase text-white/40 tracking-widest mb-1">Archetype</p>
+                                <p id="zodiac-personality" class="text-sm text-white/90 leading-tight font-semibold"></p>
                             </div>
                             <div>
-                                <p class="text-[10px] uppercase text-yellow-500 font-bold">Singing Style 🎤</p>
-                                <p id="zodiac-singing" class="text-sm text-yellow-100 leading-tight"></p>
+                                <p class="text-[9px] uppercase text-white/40 tracking-widest mb-1">Vocal Resonance</p>
+                                <p id="zodiac-singing" class="text-sm text-white/90 leading-tight italic"></p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Chart -->
-                    <div class="glass-panel rounded-[2.5rem] p-6 flex flex-col items-center justify-center relative fade-in stagger-2">
-                        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-indigo-200 mb-4">Balance</h3>
-                        <div class="w-full h-40 relative">
+                    <div class="luxury-card p-6 flex flex-col items-center justify-center">
+                        <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 mb-4">Elemental Balance</h3>
+                        <div class="w-full h-48 relative">
                             <canvas id="elementChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ABJAD RESULT SECTION -->
-            <div id="abjad-result" class="glass-panel rounded-[2.5rem] p-8 mt-6 fade-in stagger-3 border border-emerald-500/30 relative overflow-hidden">
-                 <div class="absolute inset-0 bg-gradient-to-r from-emerald-900/20 to-teal-900/20 z-0"></div>
-                 <div class="relative z-10">
-                     <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                         <div class="text-center md:text-left">
-                             <span class="text-emerald-300 text-xs font-bold uppercase tracking-[0.3em] block mb-2">Ilm-ul-Ramal Analysis</span>
-                             <h3 class="text-3xl font-bold text-white mb-1">Spiritual Geometry</h3>
-                             <p class="text-emerald-200/60 text-sm">Based on the numeric value of <span id="abjad-input-name" class="font-bold text-white"></span></p>
-                         </div>
-                         
-                         <div class="flex items-center gap-6">
-                            <div class="text-center">
-                                <span class="block text-4xl font-black text-emerald-400" id="abjad-sum">0</span>
-                                <span class="text-[10px] uppercase text-emerald-600 font-bold">Total Value</span>
-                            </div>
-                         </div>
+            <!-- Abjad -->
+            <div class="luxury-card p-10 border border-emerald-500/20 bg-emerald-900/5 relative overflow-hidden">
+                 <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                     <div class="text-center md:text-left">
+                         <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-[0.3em] block mb-2">Ilm-ul-Ramal / Numerology</span>
+                         <h3 class="text-3xl text-fancy mb-1 font-bold">Spiritual Geometry</h3>
+                         <p class="text-white/40 text-xs uppercase tracking-widest">Calculation Source: <span id="abjad-input-name" class="text-white urdu px-2"></span></p>
                      </div>
+                     <div class="text-center">
+                        <span class="block text-6xl text-emerald-400 font-bold drop-shadow-lg" id="abjad-sum">0</span>
+                        <span class="text-[9px] uppercase text-white/40 tracking-widest">Total Value</span>
+                    </div>
+                 </div>
 
-                     <div class="mt-8 bg-black/20 rounded-2xl p-6 border border-emerald-500/10">
-                         <h4 class="text-center text-sm font-bold uppercase text-emerald-300 mb-6 tracking-widest">--- Matching Divine Attribute ---</h4>
-                         <div id="abjad-matches" class="text-center space-y-2">
-                             <!-- Matches injected here -->
-                         </div>
-                     </div>
+                 <div class="mt-10 pt-10 border-t border-white/5">
+                     <h4 class="text-center text-[10px] font-bold uppercase text-emerald-500 mb-6 tracking-[0.4em]">Divine Resonance Found</h4>
+                     <div id="abjad-matches" class="text-center space-y-4"></div>
                  </div>
             </div>
 
             <!-- Footer -->
-            <footer class="text-center py-16 fade-in stagger-3 relative z-10">
+            <footer class="text-center py-24 opacity-70 hover:opacity-100 transition-opacity">
                 <div class="group cursor-default">
-                    <h1 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 drop-shadow-[0_0_25px_rgba(168,85,247,0.4)] transition-all duration-500 group-hover:scale-105 group-hover:drop-shadow-[0_0_35px_rgba(236,72,153,0.6)]">
+                    <h1 class="text-xl md:text-3xl stylish-font text-gold-premium tracking-widest mb-2">
                         Muzammil Mahmood
-                        <span class="text-white/20 mx-2 font-light">&</span>
-                        Saqib Zahid
                     </h1>
-                    <p class="text-indigo-200/50 text-xs font-bold uppercase tracking-[0.4em] mt-4">Architects of Reality</p>
+                    <p class="text-sm md:text-base font-sans text-white/60 tracking-wider font-light">
+                        Islamia University of Bahawalpur
+                    </p>
+                    
+                    <div class="h-[1px] w-12 bg-gradient-to-r from-transparent via-[#00f3ff] to-transparent mx-auto mt-6 transition-all group-hover:w-48"></div>
+                    <p class="text-white/30 text-[9px] font-bold uppercase tracking-[0.6em] mt-4">Architects of Reality</p>
                 </div>
-                <button onclick="resetApp()" class="mt-8 text-xs text-indigo-400 hover:text-white underline uppercase tracking-widest">Restart System</button>
+                <button onclick="resetApp()" class="mt-12 text-[10px] text-[#00f3ff] border border-[#00f3ff]/30 px-8 py-3 uppercase tracking-[0.2em] hover:bg-[#00f3ff] hover:text-black transition-all rounded">Restart Ritual</button>
             </footer>
         </main>
     </div>
 
     <script>
         // --- DATA ---
+        
         const elements = {
-            Fire: { urdu: "آتشی (Agni)", color: '#f43f5e', icon: '🔥', qualities: "Visionary, intense energy, magnetic leadership (قیادت، بھرپور توانائی)", challenges: "Impulsiveness, stubbornness, burnout risk (جلد بازی، ضدی)", match: "Air 🌪️" },
-            Air: { urdu: "ہوائی (Hawa)", color: '#fbbf24', icon: '🌪️', qualities: "Intellectual, adaptable, socially brilliant (ذہین، ملنسار)", challenges: "Inconsistency, lack of focus, easily bored (غیر مستقل)", match: "F
+            Fire: { 
+                urdu: "آتشی (Agni)", color: '#ef4444', icon: '🔥', 
+                qualities: "Leadership, Intense energy, Visionary, Brave, Competitive",
+                challenges: "Impulsiveness, stubbornness, burnout risk, short temper",
+                match: "Air" 
+            },
+            Air: { 
+                urdu: "ہوائی (Hawa)", color: '#f59e0b', icon: '🌪️', 
+                qualities: "Witty, Charming, Intellectual, Adaptable, Curious",
+                challenges: "Inconsistency, lack of focus, easily bored, detached",
+                match: "Fire" 
+            },
+            Water: { 
+                urdu: "آبی (Pani)", color: '#3b82f6', icon: '💧', 
+                qualities: "Intuitive, Romantic, Dreamer, Protective, Empathetic",
+                challenges: "Over-sensitive, avoids conflict, mood swings, self-sacrifice",
+                match: "Earth" 
+            },
+            Earth: { 
+                urdu: "خاکی (Mitti)", color: '#10b981', icon: '🌿', 
+                qualities: "Hardworking, Patient, Reliable, Practical, Grounded",
+                challenges: "Rigid, overthinking, slow to change, stubborn",
+                match: "Water" 
+            }
+        };
+
+        const zodiacData = [
+            { name: "Aquarius", icon: "♒", start: {m:1, d:20}, end: {m:2, d:18}, p: "Creative, unique, independent", s: "Experimental, indie, futuristic sound 🎧" },
+            { name: "Pisces", icon: "♓", start: {m:2, d:19}, end: {m:3, d:20}, p: "Dreamy, emotional, artistic", s: "Magical, emotional, soulful music 🌊" },
+            { name: "Aries", icon: "♈", start: {m:3, d:21}, end: {m:4, d:19}, p: "Bold, energetic, confident, leader", s: "Powerful, loud, high-energy (rock / rap vibes)" },
+            { name: "Taurus", icon: "♉", start: {m:4, d:20}, end: {m:5, d:20}, p: "Calm, loyal, patient, loves comfort", s: "Deep, smooth, romantic voice" },
+            { name: "Gemini", icon: "♊", start: {m:5, d:21}, end: {m:6, d:20}, p: "Talkative, intelligent, adaptable", s: "Fun, fast, pop or playful vocals" },
+            { name: "Cancer", icon: "♋", start: {m:6, d:21}, end: {m:7, d:22}, p: "Emotional, caring, sensitive", s: "Soft, soulful, emotional songs" },
+            { name: "Leo", icon: "♌", start: {m:7, d:23}, end: {m:8, d:22}, p: "Confident, dramatic, loves attention", s: "Powerful stage presence, star-like vocals 🌟" },
+            { name: "Virgo", icon: "♍", start: {m:8, d:23}, end: {m:9, d:22}, p: "Perfectionist, practical, calm", s: "Clean, soft, meaningful lyrics" },
+            { name: "Libra", icon: "♎", start: {m:9, d:23}, end: {m:10, d:22}, p: "Charming, romantic, balanced", s: "Love songs, harmony, duet-style singing 💞" },
+            { name: "Scorpio", icon: "♏", start: {m:10, d:23}, end: {m:11, d:21}, p: "Intense, mysterious, passionate", s: "Deep, emotional, dark-tone songs" },
+            { name: "Sagittarius", icon: "♐", start: {m:11, d:22}, end: {m:12, d:21}, p: "Adventurous, optimistic, free-spirited", s: "Upbeat, party, travel-vibe songs 🎉" },
+            { name: "Capricorn", icon: "♑", start: {m:12, d:22}, end: {m:1, d:19}, p: "Disciplined, serious, ambitious", s: "Classic, strong message, meaningful music" }
+        ];
+
+        const ABJAD_MAP = {'ا': 1, 'آ': 1, 'أ': 1, 'إ': 1, 'ء': 1, 'ب': 2, 'پ': 2, 'ج': 3, 'چ': 3, 'د': 4, 'ڈ': 4, 'ه': 5, 'ہ': 5, 'ة': 5, 'ھ': 5, 'و': 6, 'ؤ': 6, 'ز': 7, 'ژ': 7, 'ح': 8, 'ط': 9, 'ی': 10, 'ي': 10, 'ى': 10, 'ئ': 10, 'ے': 10, 'ک': 20, 'ك': 20, 'گ': 20, 'ل': 30, 'م': 40, 'ن': 50, 'ں': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90, 'ق': 100, 'ر': 200, 'ڑ': 200, 'ش': 300, 'ت': 400, 'ٹ': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000};
+
+        const NAMES_OF_ALLAH = [
+            { arabic: "الله", transliteration: "Allah", sum: 66, meaningUrdu: "خدا" },
+            { arabic: "الرحمن", transliteration: "Ar-Rahman", sum: 298, meaningUrdu: "بہت مہربان" },
+            { arabic: "الرحيم", transliteration: "Ar-Rahim", sum: 258, meaningUrdu: "نہایت رحم والا" },
+            { arabic: "الملك", transliteration: "Al-Malik", sum: 90, meaningUrdu: "بادشاہ" },
+            { arabic: "القدوس", transliteration: "Al-Quddus", sum: 170, meaningUrdu: "پاک ذات" },
+            { arabic: "السلام", transliteration: "As-Salam", sum: 131, meaningUrdu: "سلامتی والا" },
+            { arabic: "المؤمن", transliteration: "Al-Mu'min", sum: 136, meaningUrdu: "امن دینے والا" },
+            { arabic: "المهيمن", transliteration: "Al-Muhaymin", sum: 145, meaningUrdu: "نگہبان" },
+            { arabic: "العزيز", transliteration: "Al-Aziz", sum: 94, meaningUrdu: "غالب" },
+            { arabic: "الجبار", transliteration: "Al-Jabbar", sum: 206, meaningUrdu: "زبردست" },
+            { arabic: "المتكلم", transliteration: "Al-Mutakabbir", sum: 662, meaningUrdu: "بڑائی والا" },
+            { arabic: "الخالق", transliteration: "Al-Khaliq", sum: 731, meaningUrdu: "پیدا کرنے والا" },
+            { arabic: "البارئ", transliteration: "Al-Bari", sum: 213, meaningUrdu: "جان ڈالنے والا" },
+            { arabic: "المصور", transliteration: "Al-Musawwir", sum: 336, meaningUrdu: "صورت بنانے والا" },
+            { arabic: "الغفار", transliteration: "Al-Ghaffar", sum: 1281, meaningUrdu: "بہت بخشنے والا" },
+            { arabic: "القهار", transliteration: "Al-Qahhar", sum: 306, meaningUrdu: "قہر نازل کرنے والا" },
+            { arabic: "الوهاب", transliteration: "Al-Wahhab", sum: 14, meaningUrdu: "سب کچھ عطا کرنے والا" },
+            { arabic: "الرزاق", transliteration: "Ar-Razzaq", sum: 308, meaningUrdu: "رزق دینے والا" },
+            { arabic: "الفتاح", transliteration: "Al-Fattah", sum: 489, meaningUrdu: "کھولنے والا" },
+            { arabic: "العليم", transliteration: "Al-Alim", sum: 150, meaningUrdu: "جاننے والا" },
+            { arabic: "الودود", transliteration: "Al-Wadud", sum: 20, meaningUrdu: "محبت کرنے والا" },
+            { arabic: "النور", transliteration: "An-Nur", sum: 256, meaningUrdu: "روشن کرنے والا" },
+            { arabic: "الهادي", transliteration: "Al-Hadi", sum: 20, meaningUrdu: "ہدایت دینے والا" }
+        ];
+
+        const traitsList = [
+            {en: "Highly Driven", type: "Fire", ur: "پرجوش"}, {en: "Risk Taker", type: "Fire", ur: "نڈر"},
+            {en: "Leadership", type: "Fire", ur: "قیادت"}, {en: "Brave", type: "Fire", ur: "بہادر"},
+            {en: "Competitive", type: "Fire", ur: "مقابلہ پسند"},
+            {en: "Social", type: "Air", ur: "ملنسار"}, {en: "Creative", type: "Air", ur: "تخلیقی"},
+            {en: "Talkative", type: "Air", ur: "باتونی"}, {en: "Witty", type: "Air", ur: "حاضر جواب"},
+            {en: "Charming", type: "Air", ur: "دلکش"},
+            {en: "Empathetic", type: "Water", ur: "ہمدرد"}, {en: "Intuitive", type: "Water", ur: "حساس"},
+            {en: "Protective", type: "Water", ur: "محافظ"}, {en: "Romantic", type: "Water", ur: "رومانوی"},
+            {en: "Dreamer", type: "Water", ur: "خواب دیکھنے والا"},
+            {en: "Stable", type: "Earth", ur: "مستحکم"}, {en: "Practical", type: "Earth", ur: "عملی"},
+            {en: "Reliable", type: "Earth", ur: "قابل اعتماد"}, {en: "Hardworking", type: "Earth", ur: "محنتی"},
+            {en: "Patient", type: "Earth", ur: "صابر"}
+        ];
+
+        let selectedTraits = new Set();
+        let chartInstance = null;
+        let userData = { name: '', email: '' };
+
+        function init() {
+            const grid = document.getElementById('trait-grid');
+            grid.innerHTML = '';
+            [...traitsList].sort(() => Math.random() - 0.5).forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'trait-card rounded-2xl p-4 h-28 flex flex-col items-center justify-center gap-1 text-center group cursor-pointer';
+                btn.innerHTML = `
+                    <span class="text-white font-bold text-sm md:text-base transition-colors font-sans">${t.en}</span>
+                    <span class="urdu text-white/50 text-xs transition-colors">${t.ur}</span>
+                `;
+                btn.onclick = () => toggleTrait(btn, t.en);
+                grid.appendChild(btn);
+            });
+        }
+
+        function toggleTrait(btn, trait) {
+            btn.classList.remove('animate-pop');
+            void btn.offsetWidth; 
+            btn.classList.add('animate-pop');
+
+            if (selectedTraits.has(trait)) {
+                selectedTraits.delete(trait);
+                btn.classList.remove('trait-selected');
+            } else {
+                selectedTraits.add(trait);
+                btn.classList.add('trait-selected');
+            }
+            document.getElementById('counter').innerText = selectedTraits.size;
+        }
+
+        function goToIntro() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            if(!name || !email) return alert("Please complete your identity verification.");
+            userData = { name, email };
+            document.getElementById('intro-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+        }
+
+        function goToDateView() {
+            if (selectedTraits.size < 3) return alert("Select at least 3 traits to proceed.");
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('date-view').classList.remove('hidden');
+        }
+
+        function backToQuiz() {
+            document.getElementById('date-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+        }
+
+        function goToNameView() {
+            const day = document.getElementById('birth-day').value;
+            if(!day || day < 1 || day > 31) return alert("Enter a valid birth day.");
+            document.getElementById('date-view').classList.add('hidden');
+            document.getElementById('name-view').classList.remove('hidden');
+        }
+
+        function backToDate() {
+            document.getElementById('name-view').classList.add('hidden');
+            document.getElementById('date-view').classList.remove('hidden');
+        }
+
+        function updateLiveCalc(val) {
+            const score = calculateAbjadScore(val);
+            const preview = document.getElementById('live-calc-preview');
+            document.getElementById('live-score').innerText = score;
+            if(score > 0) preview.classList.remove('opacity-0');
+            else preview.classList.add('opacity-0');
+        }
+
+        function calculateAbjadScore(name) {
+            if (!name) return 0;
+            const cleaned = name.replace(/[\u064B-\u065F\u0670\s]/g, '');
+            const chars = cleaned.split('').filter(c => c.trim() !== '');
+            return chars.reduce((acc, char) => acc + (ABJAD_MAP[char] || 0), 0);
+        }
+
+        function findMatches(sum) {
+            const c = NAMES_OF_ALLAH;
+            const single = c.filter(item => item.sum === sum);
+            let nearest = null;
+            if(single.length === 0) {
+                 nearest = c.reduce((prev, curr) => Math.abs(curr.sum - sum) < Math.abs(prev.sum - sum) ? curr : prev);
+            }
+            return { single, nearest };
+        }
+
+        // --- NEW PROCESSING LOGIC ---
+        function startProcessing() {
+            const urduName = document.getElementById('user-name-urdu').value;
+            if(!urduName) return alert("Please enter your name in Urdu.");
+
+            document.getElementById('name-view').classList.add('hidden');
+            document.getElementById('processing-view').classList.remove('hidden');
+
+            const textEl = document.getElementById('process-text');
+            const messages = ["Aligning Stars...", "Calculating Abjad...", "Synthesizing Soul..."];
+            let i = 0;
+
+            const interval = setInterval(() => {
+                i++;
+                if (i < messages.length) {
+                    textEl.innerText = messages[i];
+                }
+            }, 800); // Change text every 800ms
+
+            setTimeout(() => {
+                clearInterval(interval);
+                document.getElementById('processing-view').classList.add('hidden');
+                revealDestiny(); // Show results
+            }, 3000); // Total 3 seconds
+        }
+
+        function revealDestiny() {
+            const month = parseInt(document.getElementById('birth-month').value);
+            const day = parseInt(document.getElementById('birth-day').value);
+            const urduName = document.getElementById('user-name-urdu').value;
+
+            let scores = { Fire: 0, Air: 0, Water: 0, Earth: 0 };
+            selectedTraits.forEach(trait => {
+                const type = traitsList.find(t => t.en === trait).type;
+                scores[type]++;
+            });
+            const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+            const winnerKey = sorted[0][0];
+            const elemData = elements[winnerKey];
+            const zodiac = getZodiacSign(day, month);
+            const abjadSum = calculateAbjadScore(urduName);
+            const matches = findMatches(abjadSum);
+
+            document.getElementById('result-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.getElementById('final-user-name').innerText = userData.name;
+            document.getElementById('final-user-email').innerText = userData.email;
+            document.getElementById('display-name').innerText = urduName;
+            
+            document.getElementById('winner-name').innerText = winnerKey;
+            document.getElementById('winner-urdu').innerText = elemData.urdu;
+            document.getElementById('winner-icon').innerText = elemData.icon;
+            document.getElementById('qualities-text').innerText = elemData.qualities;
+            document.getElementById('challenges-text').innerText = elemData.challenges;
+            document.getElementById('best-match').innerText = `${winnerKey} + ${elemData.match} ❤️`;
+            document.getElementById('element-glow').style.background = elemData.color;
+
+            document.getElementById('zodiac-name').innerText = zodiac.name;
+            document.getElementById('zodiac-icon').innerText = zodiac.icon;
+            document.getElementById('zodiac-date').innerText = `${zodiac.name} Season`;
+            document.getElementById('zodiac-personality').innerText = zodiac.p;
+            document.getElementById('zodiac-singing').innerText = zodiac.s;
+
+            document.getElementById('abjad-input-name').innerText = urduName;
+            document.getElementById('abjad-sum').innerText = abjadSum;
+            
+            const matchContainer = document.getElementById('abjad-matches');
+            matchContainer.innerHTML = '';
+            
+            if(matches.single.length > 0) {
+                matches.single.forEach(m => {
+                    matchContainer.innerHTML += `
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <h5 class="text-3xl font-bold text-white mb-2">${m.arabic}</h5>
+                            <p class="text-xs text-[#00f3ff] uppercase tracking-widest">${m.transliteration} (${m.sum})</p>
+                            <p class="text-sm text-white/70 mt-2 urdu">${m.meaningUrdu}</p>
+                        </div>
+                    `;
+                });
+            } else if (matches.nearest) {
+                const m = matches.nearest;
+                 matchContainer.innerHTML += `
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <p class="text-[9px] uppercase tracking-widest text-emerald-400 mb-2">Nearest Resonance (${m.sum})</p>
+                            <h5 class="text-3xl font-bold text-white mb-2">${m.arabic}</h5>
+                            <p class="text-xs text-[#00f3ff] uppercase tracking-widest">${m.transliteration}</p>
+                            <p class="text-sm text-white/70 mt-2 urdu">${m.meaningUrdu}</p>
+                        </div>
+                    `;
+            }
+
+            renderChart(scores);
+        }
+
+        function getZodiacSign(day, month) {
+            if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return zodiacData.find(z => z.name === "Capricorn");
+            for (let z of zodiacData) {
+                if (z.name === "Capricorn") continue;
+                if ((month == z.start.m && day >= z.start.d) || (month == z.end.m && day <= z.end.d)) return z;
+            }
+            return zodiacData[0];
+        }
+
+        function renderChart(scores) {
+            const ctx = document.getElementById('elementChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(0, 243, 255, 0.5)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            chartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: 'Profile',
+                        data: Object.values(scores),
+                        backgroundColor: gradient,
+                        borderColor: '#00f3ff',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#00f3ff'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            pointLabels: { color: '#888', font: { size: 10, family: 'Outfit' } },
+                            ticks: { display: false, backdropColor: 'transparent' }
+                        }
+                    },
+                    plugins: { legend: { display: false } },
+                    animation: { duration: 2000, easing: 'easeOutQuart' }
+                }
+            });
+        }
+
+        function resetApp() {
+            location.reload();
+        }
+
+        // Accordion Logic
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('active');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.classList.remove('open');
+            } else {
+                // Close other sections
+                document.querySelectorAll('.menu-content').forEach(c => {
+                    c.style.maxHeight = null;
+                    c.classList.remove('open');
+                    c.previousElementSibling.classList.remove('active');
+                });
+                
+                // Open clicked
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.add('open');
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('open');
+        }
+
+        init();
+    </script>
+</body>
+</html>
