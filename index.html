@@ -5,29 +5,201 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soul Calculator | Premium Edition</title>
     
-    <meta name="theme-color" content="#FFFFFF">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="./icon.svg">
-    <link rel="apple-touch-icon" href="./icon.svg">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Outfit:wght@300;400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        :root {
+            --bg-body: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #9CA3AF;
+            --grad-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --grad-cosmic: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px -10px rgba(0,0,0,0.15);
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-body); 
+            color: var(--text-main); 
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        .stylish-font { font-family: 'Cinzel Decorative', serif; }
+        .urdu { font-family: 'Noto Nastaliq Urdu', serif; line-height: 2.2; }
+
+        /* Custom UI Elements */
+        .luxury-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fashion-input {
+            width: 100%; background: transparent; border: none;
+            border-bottom: 2px solid #E5E7EB;
+            padding: 1rem 0; color: var(--text-main); font-size: 1.2rem;
+            outline: none; transition: all 0.3s;
+        }
+        .fashion-input:focus { border-bottom-color: #6366f1; }
+        
+        .input-group { position: relative; margin-bottom: 2rem; }
+        .fashion-label {
+            position: absolute; top: 1rem; left: 0; width: 100%;
+            color: var(--text-muted); text-transform: uppercase;
+            font-size: 0.8rem; letter-spacing: 0.1em; pointer-events: none;
+            transition: all 0.3s; font-weight: 600;
+        }
+        .fashion-input:focus ~ .fashion-label,
+        .fashion-input:not(:placeholder-shown) ~ .fashion-label {
+            top: -1.2rem; color: #6366f1; font-size: 0.7rem;
+        }
+
+        .btn-fancy {
+            background: var(--text-main);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-fancy:active { transform: scale(0.98); }
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1rem;
+            padding: 0 1.5rem 1.5rem;
+            scrollbar-width: none;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        .slide-card {
+            flex: 0 0 90%;
+            scroll-snap-align: center;
+            height: 200px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            color: white;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 0 1.5rem;
+        }
+
+        .app-icon {
+            width: 72px; height: 72px;
+            border-radius: 20px;
+            background: var(--bg-card);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid #F3F4F6;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .app-icon-wrapper:hover .app-icon {
+            transform: translateY(-5px);
+            border-color: #6366f1;
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .processing-orb {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #6366f1, transparent);
+            filter: blur(5px); animation: orbSpin 1.5s linear infinite;
+            margin: 0 auto 2rem;
+        }
+        @keyframes orbSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #side-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateX(-100%);
+        }
+        #side-menu.open { transform: translateX(0); }
+
+        /* Custom Alert Modal */
+        #custom-alert {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Chart container constraint */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+    </style>
 </head>
-<body class="flex flex-col items-center min-h-screen">
+<body class="flex flex-col items-center">
+
+    <!-- Custom Alert -->
+    <div id="custom-alert">
+        <div class="bg-white p-8 rounded-3xl max-w-xs w-full text-center shadow-2xl">
+            <div class="text-4xl mb-4">⚠️</div>
+            <p id="alert-message" class="text-gray-900 font-bold mb-6"></p>
+            <button onclick="closeAlert()" class="btn-fancy px-8 py-3 rounded-xl w-full">Got it</button>
+        </div>
+    </div>
 
     <!-- Sticky Header -->
     <header class="dashboard-header w-full max-w-lg">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
                 <span class="text-2xl">🔮</span>
             </div>
             <div>
                 <h1 class="font-bold text-lg leading-none text-gray-900">Soul Calc</h1>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Premium Edition</p>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">V2.0 Premium</p>
             </div>
         </div>
-        <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
+        <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -37,191 +209,118 @@
     <!-- Side Menu -->
     <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto bg-white border-r border-gray-100">
         <div class="flex justify-between items-center mb-10 pt-4">
-            <h2 class="text-xl font-bold tracking-widest text-gray-900">INFO</h2>
+            <h2 class="text-xl font-bold tracking-widest text-gray-900">SYSTEM</h2>
             <button onclick="toggleMenu()" class="text-gray-400 hover:text-gray-900 text-2xl">&times;</button>
         </div>
-        <div class="space-y-2">
-             <div>
-                <div class="menu-header" onclick="toggleAccordion(this)">
-                    <h3 class="text-xs font-bold uppercase tracking-widest">About Soul Calc</h3>
-                </div>
-                <div class="menu-content text-sm text-gray-500 leading-relaxed">
-                    A premium profiling ritual merging Elemental Traits, Zodiac Astrology, and Abjad Numerology.
-                </div>
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-2">Algorithm</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">Merging Elemental Traits, Zodiac Archetypes, and Ancient Abjad Numerology.</p>
             </div>
             <div>
-                <div class="menu-header" onclick="toggleAccordion(this)">
-                    <h3 class="text-xs font-bold uppercase tracking-widest">Contributors</h3>
-                </div>
-                <div class="menu-content text-sm text-gray-500">
-                    <div class="mb-3">
-                        <p class="font-bold text-gray-900">Muzammil Mahmood</p>
-                        <p class="text-xs">Software Engineer</p>
-                    </div>
-                    <div>
-                        <p class="font-bold text-gray-900">Saqib Zahid</p>
-                        <p class="text-xs">Contributor</p>
-                    </div>
-                </div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-2">Contributors</h3>
+                <p class="text-sm font-bold text-gray-900">Muzammil Mahmood</p>
+                <p class="text-xs text-gray-500">Lead Engineer</p>
             </div>
+            <button onclick="resetApp()" class="w-full py-4 border-2 border-red-50 text-red-500 rounded-2xl text-xs font-bold uppercase tracking-widest mt-12 hover:bg-red-50 transition-colors">
+                Reset Matrix
+            </button>
         </div>
     </div>
 
-    <!-- MAIN APP CONTAINER -->
-    <div class="w-full max-w-lg relative z-10 pb-24">
+    <!-- MAIN APP -->
+    <div class="w-full max-w-lg pb-24">
 
-        <!-- === HOME DASHBOARD === -->
+        <!-- DASHBOARD -->
         <main id="home-view" class="fade-in">
-            
-            <!-- Featured Slides -->
-            <p class="section-title">Featured Highlights</p>
+            <p class="px-6 mt-8 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Featured Highlight</p>
             <div class="carousel-container">
                 <div class="slide-card group cursor-pointer" onclick="openApp('intro-view')">
-                    <div class="slide-bg" style="background-image: linear-gradient(135deg, #6366f1, #a855f7);"></div>
-                    <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2">Featured</span>
-                    <h3 class="text-2xl font-bold mb-1">Discover Your Soul</h3>
-                    <p class="text-sm opacity-90">Take the full elemental ritual analysis today.</p>
-                </div>
-                <div class="slide-card group">
-                    <div class="slide-bg" style="background-image: linear-gradient(135deg, #f43f5e, #fb923c);"></div>
-                    <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2">Upcoming</span>
-                    <h3 class="text-2xl font-bold mb-1">Daily Energy</h3>
-                    <p class="text-sm opacity-90">Cosmic alignment tracking coming soon.</p>
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 z-0"></div>
+                    <div class="relative z-10">
+                        <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2 inline-block">New Ritual</span>
+                        <h3 class="text-2xl font-bold mb-1">Soul Matrix V2</h3>
+                        <p class="text-sm opacity-90">Begin your spiritual profiling sequence.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quick Icons -->
-            <p class="section-title">App Directory</p>
+            <p class="px-6 mt-6 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Direct Access</p>
             <div class="quick-grid">
-                <!-- App 1 -->
-                <div class="app-icon-wrapper" onclick="openApp('intro-view')">
-                    <div class="app-icon text-indigo-500">
-                        <span class="text-2xl">🔮</span>
-                    </div>
-                    <span class="app-label">Soul Calc</span>
+                <div class="app-icon-wrapper flex flex-col items-center gap-2 cursor-pointer" onclick="openApp('intro-view')">
+                    <div class="app-icon">🔮</div>
+                    <span class="text-[10px] font-bold text-gray-600">SoulCalc</span>
                 </div>
-                <!-- App 2 -->
-                <div class="app-icon-wrapper">
-                    <div class="app-icon text-purple-500">
-                        <span class="text-2xl">♈</span>
-                    </div>
-                    <span class="app-label">Horoscope</span>
+                <div class="app-icon-wrapper flex flex-col items-center gap-2 opacity-40">
+                    <div class="app-icon">♉</div>
+                    <span class="text-[10px] font-bold text-gray-600">Zodiac</span>
                 </div>
-                <!-- App 3 -->
-                <div class="app-icon-wrapper">
-                    <div class="app-icon text-emerald-500">
-                        <span class="text-2xl">🔢</span>
-                    </div>
-                    <span class="app-label">Abjad</span>
-                </div>
-                <!-- App 4 -->
-                <div class="app-icon-wrapper">
-                    <div class="app-icon text-rose-500">
-                        <span class="text-2xl">❤️</span>
-                    </div>
-                    <span class="app-label">Love</span>
-                </div>
-                <!-- App 5 -->
-                <div class="app-icon-wrapper">
-                    <div class="app-icon text-amber-500">
-                        <span class="text-2xl">🃏</span>
-                    </div>
-                    <span class="app-label">Tarot</span>
-                </div>
-                 <!-- App 6 -->
-                 <div class="app-icon-wrapper">
-                    <div class="app-icon text-gray-500">
-                        <span class="text-2xl">⚙️</span>
-                    </div>
-                    <span class="app-label">Settings</span>
+                <div class="app-icon-wrapper flex flex-col items-center gap-2 opacity-40">
+                    <div class="app-icon">🃏</div>
+                    <span class="text-[10px] font-bold text-gray-600">Tarot</span>
                 </div>
             </div>
 
-            <!-- List Style History -->
-            <p class="section-title">History</p>
-            <div class="px-6">
-                <div class="luxury-card p-4 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                        <span class="text-lg">↻</span>
+            <p class="px-6 mt-12 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Session History</p>
+            <div class="px-6" id="history-container">
+                <div class="luxury-card p-6 flex items-center gap-4 border-dashed border-2 border-gray-100 bg-gray-50/50">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 text-xl">
+                        ⏳
                     </div>
-                    <div>
-                        <p class="font-bold text-sm text-gray-900">No recent rituals</p>
-                        <p class="text-xs text-gray-400">Your results will appear here</p>
-                    </div>
+                    <p class="text-sm font-bold text-gray-400">No active profile logs</p>
                 </div>
             </div>
-
         </main>
 
-        <!-- === SUB-APPS === -->
-
-        <!-- 0. REGISTRATION -->
+        <!-- 1. REGISTRATION -->
         <main id="intro-view" class="hidden px-6 pt-6 fade-in">
-            <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gray-900">
-                <span>←</span> Back Home
-            </button>
+            <button onclick="goHome()" class="mb-6 text-sm font-bold text-gray-400">← Exit</button>
             <div class="luxury-card p-8 text-center">
-                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔐</div>
-                <h2 class="text-2xl font-bold mb-2">Access Matrix</h2>
-                <p class="text-gray-400 text-sm mb-8">Verify identity to initialize sequence.</p>
-                <div class="text-left space-y-4">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔑</div>
+                <h2 class="text-2xl font-bold mb-2">Access Portal</h2>
+                <p class="text-gray-400 text-sm mb-10">Verify your current physical vessel.</p>
+                <div class="text-left">
                     <div class="input-group">
                         <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
-                        <label class="fashion-label">Agent Name</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="reg-email" class="fashion-input" placeholder=" ">
-                        <label class="fashion-label">Gmail Account</label>
+                        <label class="fashion-label">Agent Alias</label>
                     </div>
                 </div>
-                <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl mt-8">Initialize</button>
+                <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl mt-4">Initialize Ritual</button>
             </div>
         </main>
 
-        <!-- 1. TRAITS (Now Visual Quiz) -->
+        <!-- 2. VISUAL QUIZ -->
         <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
             <div class="flex justify-between items-center mb-6">
-                <button onclick="goHome()" class="text-sm font-bold text-gray-400">Cancel</button>
-                <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">Step 1/3</span>
-            </div>
-            <h2 class="text-2xl font-bold mb-2">Ritual</h2>
-            <p class="text-gray-400 text-sm mb-6">Select the imagery that calls to you.</p>
-            
-            <!-- Grid for Images -->
-            <div id="trait-grid" class="grid grid-cols-2 gap-4 mb-24"></div>
-            
-            <div id="quiz-footer" class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur border-t border-gray-100 p-6 flex justify-between items-center z-50">
-                <div>
-                    <span class="text-xs text-gray-400 uppercase tracking-widest">Progress</span>
-                    <span id="counter" class="block text-3xl font-bold text-gray-900">0%</span>
+                <button onclick="goHome()" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cancel</button>
+                <div class="h-1 w-24 bg-gray-100 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="h-full bg-indigo-500 transition-all duration-300" style="width: 0%"></div>
                 </div>
-                <!-- Note: Main navigation is now handled by selecting images -->
-                <div class="text-xs text-gray-400 font-bold uppercase tracking-widest">Select Image to Proceed</div>
+            </div>
+            <h2 id="quiz-title" class="text-2xl font-bold mb-2">Step 1</h2>
+            <p id="quiz-question" class="text-gray-400 text-sm mb-8"></p>
+            
+            <div id="trait-grid" class="grid grid-cols-2 gap-4 mb-12"></div>
+            
+            <div id="quiz-footer" class="fixed bottom-0 left-0 w-full bg-white border-t p-6 flex justify-between items-center z-50">
+                <span id="counter" class="text-2xl font-bold text-gray-900">0%</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Analysis in Progress</span>
             </div>
         </main>
 
-        <!-- 2. DATE -->
+        <!-- 3. DATE -->
         <main id="date-view" class="hidden px-6 pt-6 fade-in">
-            <button onclick="backToQuiz()" class="mb-6 text-sm font-bold text-gray-400">← Back</button>
-            <div class="luxury-card p-8 text-center">
+            <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Temporal Lock</h2>
-                <p class="text-gray-400 text-sm mb-8">When did your journey begin?</p>
-                <div class="space-y-6 mb-8 text-left">
+                <p class="text-gray-400 text-sm mb-10">Select your cosmic entry coordinates.</p>
+                <div class="text-left space-y-8 mb-10">
                     <div>
-                        <span class="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2 block">Month</span>
-                        <select id="birth-month" class="fashion-input bg-transparent">
-                            <option value="1">January</option>
-                            <option value="2">February</option>
-                            <option value="3">March</option>
-                            <option value="4">April</option>
-                            <option value="5">May</option>
-                            <option value="6">June</option>
-                            <option value="7">July</option>
-                            <option value="8">August</option>
-                            <option value="9">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
+                        <label class="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em] mb-3 block">Month of Arrival</label>
+                        <select id="birth-month" class="fashion-input cursor-pointer">
+                            <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+                            <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+                            <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+                            <option value="10">October</option><option value="11">November</option><option value="12">December</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -229,117 +328,362 @@
                         <label class="fashion-label">Day (01-31)</label>
                     </div>
                 </div>
-                <button onclick="goToNameView()" class="btn-fancy w-full py-4 rounded-xl">Next Phase</button>
+                <button onclick="goToNameView()" class="btn-fancy w-full py-4 rounded-xl">Seal Lock</button>
             </div>
         </main>
 
-        <!-- 3. URDU NAME -->
+        <!-- 4. URDU NAME -->
         <main id="name-view" class="hidden px-6 pt-6 fade-in">
-            <button onclick="backToDate()" class="mb-6 text-sm font-bold text-gray-400">← Back</button>
-            <div class="luxury-card p-8 text-center">
+            <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Spiritual Key</h2>
-                <p class="text-gray-400 text-sm mb-10">Enter your name in Urdu script.</p>
-                <div class="mb-12 relative">
-                    <div class="input-group">
-                        <input type="text" id="user-name-urdu" class="fashion-input text-center text-4xl urdu-input" placeholder=" " dir="rtl" oninput="updateLiveCalc(this.value)">
-                        <label class="fashion-label text-center w-full" style="left:0">e.g. مزمل محمود</label>
+                <p class="text-gray-400 text-sm mb-12">Enter your name in Urdu script for Abjad calculation.</p>
+                <div class="mb-12">
+                    <input type="text" id="user-name-urdu" class="fashion-input text-center text-4xl urdu" placeholder="مزمل" dir="rtl" oninput="liveUpdateAbjad(this.value)">
+                    <div id="live-calc-box" class="mt-6 opacity-0 transition-opacity duration-300">
+                        <span class="px-4 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                            Numerical Weight: <span id="live-score">0</span>
+                        </span>
                     </div>
-                    <p id="live-calc-preview" class="text-indigo-500 text-xs font-bold uppercase tracking-widest mt-2 opacity-0 transition-opacity">
-                        Calculated Value: <span id="live-score">0</span>
-                    </p>
                 </div>
-                <button onclick="startProcessing()" class="btn-fancy w-full py-4 rounded-xl shadow-lg shadow-indigo-200">Reveal Destiny</button>
+                <button onclick="startProcessing()" class="btn-fancy w-full py-4 rounded-xl">Calculate Destiny</button>
             </div>
         </main>
 
-        <!-- 3.5 PROCESSING -->
-        <main id="processing-view" class="hidden px-6 flex flex-col items-center justify-center min-h-[60vh] text-center fade-in">
+        <!-- 5. PROCESSING -->
+        <main id="processing-view" class="hidden px-6 flex flex-col items-center justify-center min-h-[60vh] text-center">
             <div class="processing-orb"></div>
-            <h2 id="process-text" class="text-2xl font-bold text-gray-900 mb-2">Aligning Stars...</h2>
-            <p class="text-gray-400 text-sm">Please wait while we calculate</p>
+            <h2 id="process-text" class="text-2xl font-bold text-gray-900 mb-2">Synchronizing...</h2>
+            <p class="text-gray-400 text-sm">Accessing cosmic records</p>
         </main>
 
-        <!-- 4. RESULTS -->
-        <main id="result-view" class="hidden pb-20 fade-in px-4 pt-6">
-            <button onclick="goHome()" class="fixed top-6 right-6 z-50 bg-white shadow-lg px-4 py-2 rounded-full text-gray-900 font-bold text-xs uppercase tracking-widest border border-gray-100">✕ Close</button>
-
-            <div class="text-center mb-8 mt-4">
-                <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Analysis Complete For</p>
+        <!-- 6. RESULTS -->
+        <main id="result-view" class="hidden px-6 pt-12 pb-20 fade-in">
+            <div class="text-center mb-10">
+                <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Ritual Complete</p>
                 <h2 id="final-user-name" class="text-3xl font-bold text-gray-900"></h2>
             </div>
 
-            <!-- Element Card -->
-            <div class="luxury-card p-8 mb-6 text-white overflow-hidden relative" style="background: var(--grad-cosmic);">
-                <div id="element-glow" class="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500 blur-[80px] rounded-full opacity-50"></div>
-                <div class="relative z-10 text-center">
-                    <span class="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] block mb-4">My Holy Name</span>
-                    <h1 id="display-name" class="text-5xl font-bold urdu mb-8"></h1>
-                    
-                    <div class="flex flex-col items-center gap-2 mb-8">
-                        <div id="winner-icon" class="text-6xl mb-2"></div>
-                        <h2 id="winner-name" class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"></h2>
-                        <p id="winner-urdu" class="urdu text-xl text-white/70"></p>
+            <!-- Primary Element Card -->
+            <div id="element-card" class="luxury-card p-8 mb-8 text-white relative" style="background: var(--grad-cosmic)">
+                <div class="relative z-10">
+                    <h1 id="display-name" class="text-5xl font-bold urdu text-center mb-6"></h1>
+                    <div class="flex flex-col items-center gap-2 mb-10">
+                        <div id="winner-icon" class="text-7xl mb-2"></div>
+                        <h2 id="winner-name" class="text-4xl font-bold tracking-tight"></h2>
+                        <p id="winner-urdu" class="urdu text-xl opacity-70"></p>
                     </div>
-
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
-                            <h4 class="text-cyan-400 font-bold text-[10px] uppercase mb-2">Strengths</h4>
-                            <p id="qualities-text" class="text-white/80 text-xs"></p>
+                        <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-md">
+                            <span class="text-[8px] font-bold uppercase tracking-widest text-cyan-400 block mb-2">Essence</span>
+                            <p id="qualities-text" class="text-xs leading-relaxed opacity-90"></p>
                         </div>
-                        <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
-                            <h4 class="text-pink-400 font-bold text-[10px] uppercase mb-2">Challenges</h4>
-                            <p id="challenges-text" class="text-white/80 text-xs"></p>
+                        <div class="bg-white/10 p-4 rounded-2xl backdrop-blur-md">
+                            <span class="text-[8px] font-bold uppercase tracking-widest text-pink-400 block mb-2">Shadow</span>
+                            <p id="challenges-text" class="text-xs leading-relaxed opacity-90"></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Zodiac Card -->
-            <div class="luxury-card p-6 mb-6">
-                <div class="flex items-center gap-4 mb-4 border-b border-gray-100 pb-4">
-                    <span id="zodiac-icon" class="text-4xl text-indigo-500"></span>
-                    <div>
-                        <h3 id="zodiac-name" class="text-xl font-bold text-gray-900"></h3>
-                        <p id="zodiac-date" class="text-[10px] text-indigo-500 font-bold uppercase tracking-widest"></p>
-                    </div>
+            <!-- Zodiac Insight -->
+            <div class="luxury-card p-6 mb-8 flex items-center gap-6">
+                <div id="zodiac-icon" class="text-5xl"></div>
+                <div>
+                    <h3 id="zodiac-name" class="text-xl font-bold text-gray-900"></h3>
+                    <p id="zodiac-desc" class="text-sm text-gray-500 mb-2"></p>
+                    <p id="zodiac-vocal" class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest"></p>
                 </div>
-                <p id="zodiac-personality" class="text-sm text-gray-600 mb-2"></p>
-                <p id="zodiac-singing" class="text-xs text-gray-400 italic"></p>
             </div>
 
-            <!-- Chart Card -->
-            <div class="luxury-card p-6 mb-6 flex flex-col items-center">
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Elemental Balance</h3>
-                <div class="w-full h-48 relative">
+            <!-- Radar Chart -->
+            <div class="luxury-card p-8 mb-8">
+                <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Elemental Spectrum</h3>
+                <div class="chart-container">
                     <canvas id="elementChart"></canvas>
                 </div>
             </div>
 
-            <!-- Abjad Card -->
-            <div class="luxury-card p-6 bg-emerald-50 border-emerald-100">
-                 <div class="flex items-center justify-between mb-6">
-                     <div>
-                         <span class="text-emerald-600 text-[10px] font-bold uppercase tracking-widest block">Numerology</span>
-                         <h3 class="text-xl text-emerald-900 font-bold">Geometry</h3>
-                     </div>
-                     <span class="block text-4xl text-emerald-600 font-bold" id="abjad-sum">0</span>
-                 </div>
-                 <div id="abjad-matches" class="space-y-3"></div>
+            <!-- Abjad Matches -->
+            <div class="luxury-card p-8 border-emerald-100 bg-emerald-50/30">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <span class="text-emerald-600 text-[10px] font-bold uppercase tracking-widest block">Abjad Score</span>
+                        <h3 class="text-3xl font-bold text-emerald-900" id="abjad-sum">0</h3>
+                    </div>
+                    <div class="text-4xl">🔢</div>
+                </div>
+                <div id="abjad-matches" class="space-y-4"></div>
             </div>
 
-            <button onclick="goHome()" class="btn-fancy w-full py-4 rounded-xl mt-8">Return Dashboard</button>
+            <button onclick="resetApp()" class="btn-fancy w-full py-5 rounded-2xl mt-12 mb-8">Restart Sequence</button>
         </main>
 
     </div>
 
-    <!-- PWA Logic -->
-    <script type="module" src="js/app.js"></script>
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js');
+        // --- CONSTANTS & DATA ---
+        const ABJAD_MAP = {'ا': 1, 'آ': 1, 'أ': 1, 'إ': 1, 'ء': 1, 'ب': 2, 'پ': 2, 'ج': 3, 'چ': 3, 'د': 4, 'ڈ': 4, 'ه': 5, 'ہ': 5, 'ة': 5, 'ھ': 5, 'و': 6, 'ؤ': 6, 'ز': 7, 'ژ': 7, 'ح': 8, 'ط': 9, 'ی': 10, 'ي': 10, 'ى': 10, 'ئ': 10, 'ے': 10, 'ک': 20, 'ك': 20, 'گ': 20, 'ل': 30, 'م': 40, 'ن': 50, 'ں': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90, 'ق': 100, 'ر': 200, 'ڑ': 200, 'ش': 300, 'ت': 400, 'ٹ': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000};
+
+        const ELEMENTS = {
+            Fire: { urdu: "آتشی (Agni)", icon: '🔥', q: "Driven, Brave, Competitive, Visionary", c: "Impulsive, stubborn, burnout risk" },
+            Air: { urdu: "ہوائی (Hawa)", icon: '🌪️', q: "Witty, Charming, Intellectual, Adaptable", c: "Inconsistent, lack of focus, detached" },
+            Water: { urdu: "آبی (Pani)", icon: '💧', q: "Intuitive, Romantic, Dreamer, Empathetic", c: "Over-sensitive, avoids conflict, moody" },
+            Earth: { urdu: "خاکی (Mitti)", icon: '🌿', q: "Reliable, Practical, Grounded, Patient", c: "Rigid, overthinking, slow to change" }
+        };
+
+        const ZODIAC_DATA = [
+            { name: "Aquarius", icon: "♒", start: [1, 20], end: [2, 18], p: "Creative, independent", s: "Experimental Vocals" },
+            { name: "Pisces", icon: "♓", start: [2, 19], end: [3, 20], p: "Dreamy, emotional", s: "Soulful Melodies" },
+            { name: "Aries", icon: "♈", start: [3, 21], end: [4, 19], p: "Bold, leader", s: "Powerful High-Energy" },
+            { name: "Taurus", icon: "♉", start: [4, 20], end: [5, 20], p: "Calm, loyal", s: "Romantic Smooth Voice" },
+            { name: "Gemini", icon: "♊", start: [5, 21], end: [6, 20], p: "Intellectual, adaptable", s: "Playful Pop Vocals" },
+            { name: "Cancer", icon: "♋", start: [6, 21], end: [7, 22], p: "Caring, sensitive", s: "Emotional Soft Vocals" },
+            { name: "Leo", icon: "♌", start: [7, 23], end: [8, 22], p: "Confident, dramatic", s: "Powerful Star Presence" },
+            { name: "Virgo", icon: "♍", start: [8, 23], end: [9, 22], p: "Practical, calm", s: "Meaningful Clean Vocals" },
+            { name: "Libra", icon: "♎", start: [9, 23], end: [10, 22], p: "Charming, balanced", s: "Harmonious Duet Tone" },
+            { name: "Scorpio", icon: "♏", start: [10, 23], end: [11, 21], p: "Mysterious, passionate", s: "Deep Dark-Tone Vocals" },
+            { name: "Sagittarius", icon: "♐", start: [11, 22], end: [12, 21], p: "Adventurous, free-spirited", s: "Upbeat Party Vibe" },
+            { name: "Capricorn", icon: "♑", start: [12, 22], end: [1, 19], p: "Disciplined, ambitious", s: "Classic Strong Vocals" }
+        ];
+
+        const ASMA_UL_HUSNA = [
+            { a: "الله", t: "Allah", s: 66, m: "خدا" },
+            { a: "الرحمن", t: "Ar-Rahman", s: 298, m: "بہت مہربان" },
+            { a: "الرحيم", t: "Ar-Rahim", s: 258, m: "نہایت رحم والا" },
+            { a: "الملك", t: "Al-Malik", s: 90, m: "بادشاہ" },
+            { a: "السلام", t: "As-Salam", s: 131, m: "سلامتی والا" },
+            { a: "العزيز", t: "Al-Aziz", s: 94, m: "غالب" },
+            { a: "الودود", t: "Al-Wadud", s: 20, m: "محبت کرنے والا" },
+            { a: "النور", t: "An-Nur", s: 256, m: "روشن کرنے والا" }
+        ];
+
+        const QUIZ_STEPS = [
+            {
+                q: "The gateway to your soul appears. What is it made of?",
+                o: [
+                    { t: "Eternal Flame", type: "Fire", i: "https://images.unsplash.com/photo-1520699049698-acd2fcc51056?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Deep Ocean", type: "Water", i: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Ethereal Mist", type: "Air", i: "https://images.unsplash.com/photo-1505672675380-4d6d6fe5a8e5?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Ancient Stone", type: "Earth", i: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80" }
+                ]
+            },
+            {
+                q: "Which celestial event resonates with your vibration?",
+                o: [
+                    { t: "Supernova", type: "Fire", i: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Meteor Shower", type: "Water", i: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Aurora Borealis", type: "Air", i: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Solar Eclipse", type: "Earth", i: "https://images.unsplash.com/photo-1532978379173-5cf554a6965e?auto=format&fit=crop&w=300&q=80" }
+                ]
+            }
+        ];
+
+        // --- STATE ---
+        let appState = {
+            currentStep: 0,
+            answers: [],
+            userName: '',
+            birthDay: null,
+            birthMonth: null,
+            chart: null
+        };
+
+        // --- HELPERS ---
+        function showAlert(msg) {
+            document.getElementById('alert-message').innerText = msg;
+            document.getElementById('custom-alert').style.display = 'flex';
+        }
+        function closeAlert() { document.getElementById('custom-alert').style.display = 'none'; }
+
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+
+        function switchView(toId) {
+            const views = ['home-view', 'intro-view', 'quiz-view', 'date-view', 'name-view', 'processing-view', 'result-view'];
+            views.forEach(v => document.getElementById(v).classList.add('hidden'));
+            document.getElementById(toId).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        // --- NAVIGATION ---
+        function openApp(id) { switchView(id); }
+        function goHome() { switchView('home-view'); }
+
+        function goToIntro() {
+            const val = document.getElementById('reg-name').value;
+            if(!val) return showAlert("Identity required.");
+            appState.userName = val;
+            appState.currentStep = 0;
+            appState.answers = [];
+            switchView('quiz-view');
+            renderQuiz();
+        }
+
+        // --- QUIZ ENGINE ---
+        function renderQuiz() {
+            const step = QUIZ_STEPS[appState.currentStep];
+            if(!step) return finishQuiz();
+
+            document.getElementById('quiz-title').innerText = `Step ${appState.currentStep + 1}`;
+            document.getElementById('quiz-question').innerText = step.q;
+            document.getElementById('counter').innerText = `${Math.round((appState.currentStep / QUIZ_STEPS.length) * 100)}%`;
+            document.getElementById('quiz-progress-bar').style.width = `${(appState.currentStep / QUIZ_STEPS.length) * 100}%`;
+
+            const grid = document.getElementById('trait-grid');
+            grid.innerHTML = '';
+            step.o.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'relative group overflow-hidden rounded-2xl aspect-square shadow-lg hover:shadow-xl transition-all';
+                btn.innerHTML = `
+                    <img src="${opt.i}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 flex items-end p-4">
+                        <span class="text-white font-bold text-xs uppercase tracking-widest">${opt.t}</span>
+                    </div>
+                `;
+                btn.onclick = () => {
+                    appState.answers.push(opt.type);
+                    appState.currentStep++;
+                    renderQuiz();
+                };
+                grid.appendChild(btn);
             });
         }
+
+        function finishQuiz() {
+            switchView('date-view');
+        }
+
+        function goToNameView() {
+            const d = parseInt(document.getElementById('birth-day').value);
+            if(!d || d < 1 || d > 31) return showAlert("Invalid day coordinate.");
+            appState.birthDay = d;
+            appState.birthMonth = parseInt(document.getElementById('birth-month').value);
+            switchView('name-view');
+        }
+
+        function liveUpdateAbjad(val) {
+            const score = calcAbjad(val);
+            document.getElementById('live-score').innerText = score;
+            document.getElementById('live-calc-box').style.opacity = score > 0 ? 1 : 0;
+        }
+
+        function calcAbjad(str) {
+            if(!str) return 0;
+            const clean = str.replace(/[\u064B-\u065F\u0670\s]/g, '');
+            return clean.split('').reduce((sum, char) => sum + (ABJAD_MAP[char] || 0), 0);
+        }
+
+        function startProcessing() {
+            const urdu = document.getElementById('user-name-urdu').value;
+            if(!urdu) return showAlert("Urdu Key missing.");
+            switchView('processing-view');
+            
+            const msgs = ["Aligning Stars...", "Calculating Abjad...", "Finalizing Matrix..."];
+            let i = 0;
+            const timer = setInterval(() => {
+                i++;
+                if(i < msgs.length) document.getElementById('process-text').innerText = msgs[i];
+            }, 1000);
+
+            setTimeout(() => {
+                clearInterval(timer);
+                generateResults(urdu);
+            }, 3000);
+        }
+
+        function getZodiac(d, m) {
+            for(let z of ZODIAC_DATA) {
+                if((m == z.start[0] && d >= z.start[1]) || (m == z.end[0] && d <= z.end[1])) return z;
+            }
+            return ZODIAC_DATA[ZODIAC_DATA.length - 1]; // Capricorn fallback
+        }
+
+        function generateResults(urdu) {
+            const scores = { Fire:0, Air:0, Water:0, Earth:0 };
+            appState.answers.forEach(a => scores[a]++);
+
+            const winnerKey = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+            const winner = ELEMENTS[winnerKey];
+            const zodiac = getZodiac(appState.birthDay, appState.birthMonth);
+            const abjad = calcAbjad(urdu);
+
+            // Populate Results UI
+            document.getElementById('final-user-name').innerText = appState.userName;
+            document.getElementById('display-name').innerText = urdu;
+            document.getElementById('winner-name').innerText = winnerKey;
+            document.getElementById('winner-urdu').innerText = winner.urdu;
+            document.getElementById('winner-icon').innerText = winner.icon;
+            document.getElementById('qualities-text').innerText = winner.q;
+            document.getElementById('challenges-text').innerText = winner.c;
+
+            document.getElementById('zodiac-icon').innerText = zodiac.icon;
+            document.getElementById('zodiac-name').innerText = zodiac.name;
+            document.getElementById('zodiac-desc').innerText = zodiac.p;
+            document.getElementById('zodiac-vocal').innerText = `Vibration: ${zodiac.s}`;
+
+            document.getElementById('abjad-sum').innerText = abjad;
+            renderAbjadMatches(abjad);
+            renderChart(scores);
+
+            switchView('result-view');
+        }
+
+        function renderAbjadMatches(sum) {
+            const container = document.getElementById('abjad-matches');
+            container.innerHTML = '';
+            
+            const matches = ASMA_UL_HUSNA.filter(n => n.s === sum);
+            const displayList = matches.length > 0 ? matches : [ASMA_UL_HUSNA.reduce((p, c) => Math.abs(c.s - sum) < Math.abs(p.s - sum) ? c : p)];
+
+            displayList.forEach(m => {
+                const div = document.createElement('div');
+                div.className = "p-4 bg-white rounded-2xl flex justify-between items-center shadow-sm border border-emerald-100";
+                div.innerHTML = `
+                    <div>
+                        <h4 class="text-xl font-bold text-gray-800">${m.a}</h4>
+                        <p class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest">${m.t} (${m.s})</p>
+                    </div>
+                    <p class="text-xs text-gray-400 urdu">${m.m}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderChart(scores) {
+            const ctx = document.getElementById('elementChart').getContext('2d');
+            if (appState.chart) appState.chart.destroy();
+
+            appState.chart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Fire', 'Air', 'Water', 'Earth'],
+                    datasets: [{
+                        data: [scores.Fire, scores.Air, scores.Water, scores.Earth],
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: '#6366f1',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#6366f1'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: { 
+                            beginAtZero: true, 
+                            ticks: { display: false },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        }
+                    },
+                    plugins: { legend: { display: false } },
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function resetApp() { location.reload(); }
+
+        // Boot
+        window.onload = () => {
+            console.log("System Initialized.");
+        };
     </script>
 </body>
 </html>
