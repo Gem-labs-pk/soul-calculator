@@ -24,6 +24,11 @@
             --grad-cosmic: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
             --shadow-hover: 0 20px 40px -10px rgba(0,0,0,0.15);
+            
+            /* Bubble Colors */
+            --col-disagree: #06b6d4; /* Cyan-500 */
+            --col-agree: #10b981;    /* Emerald-500 */
+            --col-neutral: #e5e7eb;  /* Gray-200 */
         }
 
         body { 
@@ -175,6 +180,68 @@
             height: 250px;
             width: 100%;
         }
+
+        /* --- Bubble Scale UI --- */
+        .bubble-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 0;
+            position: relative;
+        }
+        
+        /* Line behind bubbles */
+        .bubble-track {
+            position: absolute;
+            left: 0; right: 0; top: 50%;
+            height: 2px;
+            background: #f3f4f6;
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+
+        .bubble-btn {
+            border-radius: 50%;
+            border: 2px solid;
+            background: white;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+
+        .bubble-btn:hover { transform: scale(1.15); }
+        .bubble-btn.selected { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* Sizes based on position (0-6) */
+        .b-size-0, .b-size-6 { width: 56px; height: 56px; }
+        .b-size-1, .b-size-5 { width: 44px; height: 44px; }
+        .b-size-2, .b-size-4 { width: 32px; height: 32px; }
+        .b-size-3 { width: 24px; height: 24px; background: var(--col-neutral); border-color: transparent; }
+
+        /* Colors */
+        .b-disagree { border-color: var(--col-disagree); }
+        .b-agree { border-color: var(--col-agree); }
+        
+        /* Fill on Select */
+        .b-disagree.selected { background: var(--col-disagree); }
+        .b-agree.selected { background: var(--col-agree); }
+        .b-neutral.selected { background: #9ca3af; transform: scale(1.3); }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .label-disagree { color: var(--col-disagree); }
+        .label-agree { color: var(--col-agree); }
+
     </style>
 </head>
 <body class="flex flex-col items-center">
@@ -238,9 +305,9 @@
                 <div class="slide-card group cursor-pointer" onclick="openApp('intro-view')">
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 z-0"></div>
                     <div class="relative z-10">
-                        <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2 inline-block">New Feature</span>
+                        <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2 inline-block">Logic Engine V2</span>
                         <h3 class="text-2xl font-bold mb-1">Visual Personality Test</h3>
-                        <p class="text-sm opacity-90">Discover your elemental nature through imagery.</p>
+                        <p class="text-sm opacity-90">Advanced psychometric alignment sequence.</p>
                     </div>
                 </div>
             </div>
@@ -278,7 +345,7 @@
             <div class="luxury-card p-8 text-center">
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔑</div>
                 <h2 class="text-2xl font-bold mb-2">Visual Personality Test</h2>
-                <p class="text-gray-400 text-sm mb-10">Enter your details to begin the visual assessment.</p>
+                <p class="text-gray-400 text-sm mb-10">Enter your details to begin the psychometric assessment.</p>
                 <div class="text-left">
                     <div class="input-group">
                         <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
@@ -289,7 +356,7 @@
             </div>
         </main>
 
-        <!-- 2. VISUAL QUIZ -->
+        <!-- 2. QUIZ (Dynamic Layout) -->
         <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="goHome()" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cancel</button>
@@ -297,14 +364,18 @@
                     <div id="quiz-progress-bar" class="h-full bg-indigo-500 transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
-            <h2 id="quiz-title" class="text-2xl font-bold mb-2">Step 1</h2>
-            <p id="quiz-question" class="text-gray-400 text-sm mb-8"></p>
             
-            <div id="trait-grid" class="grid grid-cols-2 gap-4 mb-12"></div>
+            <div class="luxury-card p-8 min-h-[400px] flex flex-col justify-center">
+                <h2 id="quiz-title" class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-4">Step 1</h2>
+                <p id="quiz-question" class="text-xl font-bold text-gray-800 mb-8 leading-relaxed"></p>
+                
+                <!-- Container for either Grid or Bubbles -->
+                <div id="quiz-content-area" class="w-full"></div>
+            </div>
             
-            <div id="quiz-footer" class="fixed bottom-0 left-0 w-full bg-white border-t p-6 flex justify-between items-center z-50">
+            <div id="quiz-footer" class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur border-t p-6 flex justify-between items-center z-50">
                 <span id="counter" class="text-2xl font-bold text-gray-900">0%</span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Analysis in Progress</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Psychometrics Active</span>
             </div>
         </main>
 
@@ -457,50 +528,37 @@
             { a: "النور", t: "An-Nur", s: 256, m: "روشن کرنے والا" }
         ];
 
+        // --- NEW LOGIC ENGINE DATA ---
+        // Mixed Types: 'scale' for psychometrics, 'image' for visual subconcious
         const QUIZ_STEPS = [
             {
-                q: "The gateway to your soul appears. What is it made of?",
+                type: 'scale',
+                q: "I often make decisions based on my gut feelings rather than logical analysis.",
+                target: 'Water', // High agreement = Water
+            },
+            {
+                type: 'scale',
+                q: "I feel most energized when I am taking charge of a situation or leading others.",
+                target: 'Fire', // High agreement = Fire
+            },
+            {
+                type: 'scale',
+                q: "I prefer stability, clear plans, and established routines over spontaneity.",
+                target: 'Earth', // High agreement = Earth
+            },
+            {
+                type: 'scale',
+                q: "I enjoy discussing abstract ideas, theories, and possibilities more than practical details.",
+                target: 'Air', // High agreement = Air
+            },
+            {
+                type: 'image',
+                q: "The gateway to your soul appears. What does it look like?",
                 o: [
                     { t: "Eternal Flame", type: "Fire", i: "https://images.unsplash.com/photo-1520699049698-acd2fcc51056?auto=format&fit=crop&w=300&q=80" },
                     { t: "Deep Ocean", type: "Water", i: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=300&q=80" },
                     { t: "Ethereal Mist", type: "Air", i: "https://images.unsplash.com/photo-1505672675380-4d6d6fe5a8e5?auto=format&fit=crop&w=300&q=80" },
                     { t: "Ancient Stone", type: "Earth", i: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=300&q=80" }
-                ]
-            },
-            {
-                q: "Which celestial event resonates with your vibration?",
-                o: [
-                    { t: "Supernova", type: "Fire", i: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Meteor Shower", type: "Water", i: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Aurora Borealis", type: "Air", i: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Solar Eclipse", type: "Earth", i: "https://images.unsplash.com/photo-1532978379173-5cf554a6965e?auto=format&fit=crop&w=300&q=80" }
-                ]
-            },
-            {
-                q: "You find a lost artifact in the sand. What is it?",
-                o: [
-                     { t: "Golden Crown", type: "Fire", i: "https://images.unsplash.com/photo-1605218427306-022ba8c26a42?auto=format&fit=crop&w=300&q=80" },
-                     { t: "Silver Mirror", type: "Water", i: "https://images.unsplash.com/photo-1563205764-6e9352d9a934?auto=format&fit=crop&w=300&q=80" },
-                     { t: "Antique Compass", type: "Air", i: "https://images.unsplash.com/photo-1623864467008-0125c1b6a378?auto=format&fit=crop&w=300&q=80" },
-                     { t: "Bound Book", type: "Earth", i: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" }
-                ]
-            },
-            {
-                q: "A storm approaches. What is your instinct?",
-                o: [
-                    { t: "Command it", type: "Fire", i: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Flow with it", type: "Water", i: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Fly above it", type: "Air", i: "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Stand firm", type: "Earth", i: "https://images.unsplash.com/photo-1500964757637-c85e8a162699?auto=format&fit=crop&w=300&q=80" }
-                ]
-            },
-            {
-                q: "Which color palette pulls your soul?",
-                o: [
-                    { t: "Crimson Red", type: "Fire", i: "https://images.unsplash.com/photo-1541414779316-956a5084c0d4?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Deep Teal", type: "Water", i: "https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Azure Blue", type: "Air", i: "https://images.unsplash.com/photo-1536514498073-50e69d39c6cf?auto=format&fit=crop&w=300&q=80" },
-                    { t: "Forest Green", type: "Earth", i: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&w=300&q=80" }
                 ]
             }
         ];
@@ -508,7 +566,7 @@
         // --- STATE ---
         let appState = {
             currentStep: 0,
-            answers: [],
+            scores: { Fire: 0, Water: 0, Air: 0, Earth: 0 },
             userName: '',
             birthDay: null,
             birthMonth: null,
@@ -540,39 +598,136 @@
             if(!val) return showAlert("Identity required.");
             appState.userName = val;
             appState.currentStep = 0;
-            appState.answers = [];
+            // Reset scores
+            appState.scores = { Fire: 0, Water: 0, Air: 0, Earth: 0 };
             switchView('quiz-view');
             renderQuiz();
         }
 
-        // --- QUIZ ENGINE ---
+        // --- LOGIC ENGINE ---
         function renderQuiz() {
             const step = QUIZ_STEPS[appState.currentStep];
             if(!step) return finishQuiz();
 
-            document.getElementById('quiz-title').innerText = `Step ${appState.currentStep + 1}`;
-            document.getElementById('quiz-question').innerText = step.q;
-            document.getElementById('counter').innerText = `${Math.round((appState.currentStep / QUIZ_STEPS.length) * 100)}%`;
-            document.getElementById('quiz-progress-bar').style.width = `${(appState.currentStep / QUIZ_STEPS.length) * 100}%`;
+            const title = document.getElementById('quiz-title');
+            const question = document.getElementById('quiz-question');
+            const contentArea = document.getElementById('quiz-content-area');
+            const counter = document.getElementById('counter');
+            const progressBar = document.getElementById('quiz-progress-bar');
 
-            const grid = document.getElementById('trait-grid');
-            grid.innerHTML = '';
+            // Update Header
+            title.innerText = `Phase ${appState.currentStep + 1}`;
+            question.innerText = step.q;
+            counter.innerText = `${Math.round((appState.currentStep / QUIZ_STEPS.length) * 100)}%`;
+            progressBar.style.width = `${(appState.currentStep / QUIZ_STEPS.length) * 100}%`;
+
+            // Clear previous content
+            contentArea.innerHTML = '';
+
+            if (step.type === 'scale') {
+                renderScaleQuestion(contentArea, step);
+            } else if (step.type === 'image') {
+                renderImageQuestion(contentArea, step);
+            }
+        }
+
+        function renderScaleQuestion(container, step) {
+            // Generate Bubble UI
+            const wrapper = document.createElement('div');
+            wrapper.className = "flex flex-col items-center w-full mt-8";
+
+            const bubbleContainer = document.createElement('div');
+            bubbleContainer.className = "bubble-container";
+
+            // Track Line
+            const track = document.createElement('div');
+            track.className = "bubble-track";
+            bubbleContainer.appendChild(track);
+
+            // 7 Bubbles (0 to 6)
+            for (let i = 0; i < 7; i++) {
+                const btn = document.createElement('div');
+                let sizeClass = 'b-size-3'; // Default neutral
+                let colorClass = 'b-neutral';
+
+                // Assign Sizes and Colors based on position
+                if (i === 0) { sizeClass = 'b-size-0'; colorClass = 'b-disagree'; }
+                else if (i === 1) { sizeClass = 'b-size-1'; colorClass = 'b-disagree'; }
+                else if (i === 2) { sizeClass = 'b-size-2'; colorClass = 'b-disagree'; }
+                else if (i === 3) { sizeClass = 'b-size-3'; colorClass = 'b-neutral'; } // Middle
+                else if (i === 4) { sizeClass = 'b-size-4'; colorClass = 'b-agree'; }
+                else if (i === 5) { sizeClass = 'b-size-5'; colorClass = 'b-agree'; }
+                else if (i === 6) { sizeClass = 'b-size-6'; colorClass = 'b-agree'; }
+
+                btn.className = `bubble-btn ${sizeClass} ${colorClass}`;
+                btn.onclick = () => handleScaleAnswer(i, step.target, btn);
+                bubbleContainer.appendChild(btn);
+            }
+
+            // Labels
+            const labels = document.createElement('div');
+            labels.className = "scale-labels";
+            labels.innerHTML = `
+                <span class="label-disagree">Disagree</span>
+                <span class="label-agree">Agree</span>
+            `;
+
+            wrapper.appendChild(bubbleContainer);
+            wrapper.appendChild(labels);
+            container.appendChild(wrapper);
+        }
+
+        function renderImageQuestion(container, step) {
+            const grid = document.createElement('div');
+            grid.className = "grid grid-cols-2 gap-4 w-full";
+            
             step.o.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = 'relative group overflow-hidden rounded-2xl aspect-square shadow-lg hover:shadow-xl transition-all';
+                btn.className = 'relative group overflow-hidden rounded-2xl aspect-square shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-indigo-500';
                 btn.innerHTML = `
                     <img src="${opt.i}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     <div class="absolute inset-0 bg-black/40 flex items-end p-4">
                         <span class="text-white font-bold text-xs uppercase tracking-widest">${opt.t}</span>
                     </div>
                 `;
-                btn.onclick = () => {
-                    appState.answers.push(opt.type);
-                    appState.currentStep++;
-                    renderQuiz();
-                };
+                btn.onclick = () => handleImageAnswer(opt.type);
                 grid.appendChild(btn);
             });
+            container.appendChild(grid);
+        }
+
+        function handleScaleAnswer(index, targetElement, btnElement) {
+            // Visual Feedback
+            document.querySelectorAll('.bubble-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+
+            // Logic: 0-6 index maps to score. 
+            // 0=Strong Disagree (1pt), 6=Strong Agree (7pts)
+            // 3=Neutral (3.5pts? No, simpler to just add weighted score)
+            
+            // Let's use a 1-7 points system
+            const score = index + 1; 
+            
+            // Add to target element score
+            // If the question was "reverse coded", we would flip logic here. Assuming direct questions for now.
+            if(appState.scores[targetElement] !== undefined) {
+                appState.scores[targetElement] += score;
+            }
+
+            // Delay for UX
+            setTimeout(() => {
+                appState.currentStep++;
+                renderQuiz();
+            }, 400);
+        }
+
+        function handleImageAnswer(type) {
+            // Images are powerful subconscious indicators. Give a substantial boost (e.g., +10 points)
+            if(appState.scores[type] !== undefined) {
+                appState.scores[type] += 10;
+            }
+            appState.currentStep++;
+            renderQuiz();
         }
 
         function finishQuiz() {
@@ -604,7 +759,7 @@
             if(!urdu) return showAlert("Urdu Key missing.");
             switchView('processing-view');
             
-            const msgs = ["Aligning Stars...", "Calculating Abjad...", "Finalizing Matrix..."];
+            const msgs = ["Aligning Psychometrics...", "Calculating Abjad...", "Finalizing Matrix..."];
             let i = 0;
             const timer = setInterval(() => {
                 i++;
@@ -625,10 +780,10 @@
         }
 
         function generateResults(urdu) {
-            const scores = { Fire:0, Air:0, Water:0, Earth:0 };
-            appState.answers.forEach(a => scores[a]++);
-
+            // Determine Winner based on accumulated scores
+            const scores = appState.scores;
             const winnerKey = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+            
             const winner = ELEMENTS[winnerKey];
             const zodiac = getZodiac(appState.birthDay, appState.birthMonth);
             const abjad = calcAbjad(urdu);
