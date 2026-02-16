@@ -8,7 +8,7 @@ let userData = { name: '', email: '' };
 // Initialize App
 function init() {
     renderTraits();
-    setupEventListeners();
+    // Default is home view, no special init needed
 }
 
 function renderTraits() {
@@ -19,10 +19,10 @@ function renderTraits() {
     // Randomize traits order
     [...traitsList].sort(() => Math.random() - 0.5).forEach(t => {
         const btn = document.createElement('button');
-        btn.className = 'trait-card rounded-2xl p-4 h-28 flex flex-col items-center justify-center gap-1 text-center group cursor-pointer';
+        btn.className = 'trait-card rounded-2xl p-3 h-24 flex flex-col items-center justify-center gap-1 text-center group cursor-pointer';
         btn.innerHTML = `
-            <span class="text-white font-bold text-sm md:text-base transition-colors font-sans">${t.en}</span>
-            <span class="urdu text-white/50 text-xs transition-colors">${t.ur}</span>
+            <span class="text-white font-bold text-xs transition-colors font-sans">${t.en}</span>
+            <span class="urdu text-white/50 text-[10px] transition-colors">${t.ur}</span>
         `;
         btn.onclick = () => toggleTrait(btn, t.en);
         grid.appendChild(btn);
@@ -30,7 +30,6 @@ function renderTraits() {
 }
 
 function toggleTrait(btn, trait) {
-    // Re-trigger animation
     btn.classList.remove('animate-pop');
     void btn.offsetWidth; 
     btn.classList.add('animate-pop');
@@ -45,7 +44,26 @@ function toggleTrait(btn, trait) {
     document.getElementById('counter').innerText = selectedTraits.size;
 }
 
-// Navigation Functions
+// --- Navigation Functions ---
+
+// Open a specific "App" from the home screen
+window.openApp = function(viewId) {
+    switchView('home-view', viewId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Return to Dashboard
+window.goHome = function() {
+    // Hide all sub-views
+    ['intro-view', 'quiz-view', 'date-view', 'name-view', 'processing-view', 'result-view'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+    // Show home
+    document.getElementById('home-view').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Intro Flow
 window.goToIntro = function() {
     const name = document.getElementById('reg-name').value;
     const email = document.getElementById('reg-email').value;
@@ -104,7 +122,6 @@ function revealDestiny(urduName) {
     const month = parseInt(document.getElementById('birth-month').value);
     const day = parseInt(document.getElementById('birth-day').value);
 
-    // Calculate Element
     let scores = { Fire: 0, Air: 0, Water: 0, Earth: 0 };
     selectedTraits.forEach(trait => {
         const type = traitsList.find(t => t.en === trait).type;
@@ -114,15 +131,12 @@ function revealDestiny(urduName) {
     const winnerKey = sorted[0][0];
     const elemData = elements[winnerKey];
     
-    // Calculate Zodiac & Abjad
     const zodiac = getZodiacSign(day, month);
     const abjadSum = calculateAbjadScore(urduName);
     const matches = findMatches(abjadSum);
 
-    // Render DOM
     window.scrollTo({ top: 0, behavior: 'smooth' });
     document.getElementById('final-user-name').innerText = userData.name;
-    document.getElementById('final-user-email').innerText = userData.email;
     document.getElementById('display-name').innerText = urduName;
     
     document.getElementById('winner-name').innerText = winnerKey;
@@ -130,7 +144,6 @@ function revealDestiny(urduName) {
     document.getElementById('winner-icon').innerText = elemData.icon;
     document.getElementById('qualities-text').innerText = elemData.qualities;
     document.getElementById('challenges-text').innerText = elemData.challenges;
-    document.getElementById('best-match').innerText = `${winnerKey} + ${elemData.match} ❤️`;
     document.getElementById('element-glow').style.background = elemData.color;
 
     document.getElementById('zodiac-name').innerText = zodiac.name;
@@ -139,7 +152,6 @@ function revealDestiny(urduName) {
     document.getElementById('zodiac-personality').innerText = zodiac.p;
     document.getElementById('zodiac-singing').innerText = zodiac.s;
 
-    document.getElementById('abjad-input-name').innerText = urduName;
     document.getElementById('abjad-sum').innerText = abjadSum;
     
     renderMatches(matches);
@@ -161,11 +173,13 @@ function renderMatches(matches) {
 
 function createMatchCard(m, isExact) {
     return `
-        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
-            ${!isExact ? `<p class="text-[9px] uppercase tracking-widest text-emerald-400 mb-2">Nearest Resonance (${m.sum})</p>` : ''}
-            <h5 class="text-3xl font-bold text-white mb-2">${m.arabic}</h5>
-            <p class="text-xs text-[#00f3ff] uppercase tracking-widest">${m.transliteration} (${m.sum})</p>
-            <p class="text-sm text-white/70 mt-2 urdu">${m.meaningUrdu}</p>
+        <div class="p-3 bg-white/5 rounded-lg border border-white/10 flex items-center justify-between">
+            <div>
+                ${!isExact ? `<p class="text-[8px] uppercase tracking-widest text-emerald-400 mb-1">Nearest</p>` : ''}
+                <h5 class="text-xl font-bold text-white">${m.arabic}</h5>
+                <p class="text-[10px] text-[#00f3ff] uppercase tracking-widest">${m.transliteration} (${m.sum})</p>
+            </div>
+            <p class="text-xs text-white/70 urdu text-right">${m.meaningUrdu}</p>
         </div>
     `;
 }
@@ -202,7 +216,8 @@ function renderChart(scores) {
                 }
             },
             plugins: { legend: { display: false } },
-            animation: { duration: 2000, easing: 'easeOutQuart' }
+            animation: { duration: 2000, easing: 'easeOutQuart' },
+            maintainAspectRatio: false
         }
     });
 }
