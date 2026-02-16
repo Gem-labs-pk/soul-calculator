@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soul Calculator | Visual Personality Test</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Outfit:wght@300;400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -246,7 +244,6 @@
 </head>
 <body class="flex flex-col items-center">
 
-    <!-- Custom Alert -->
     <div id="custom-alert">
         <div class="bg-white p-8 rounded-3xl max-w-xs w-full text-center shadow-2xl">
             <div class="text-4xl mb-4">⚠️</div>
@@ -255,7 +252,6 @@
         </div>
     </div>
 
-    <!-- Sticky Header -->
     <header class="dashboard-header w-full max-w-lg">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
@@ -273,7 +269,6 @@
         </button>
     </header>
 
-    <!-- Side Menu -->
     <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto bg-white border-r border-gray-100">
         <div class="flex justify-between items-center mb-10 pt-4">
             <h2 class="text-xl font-bold tracking-widest text-gray-900">SYSTEM</h2>
@@ -295,10 +290,8 @@
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div class="w-full max-w-lg pb-24">
 
-        <!-- DASHBOARD -->
         <main id="home-view" class="fade-in">
             <p class="px-6 mt-8 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Featured Highlight</p>
             <div class="carousel-container">
@@ -334,29 +327,22 @@
                     <div class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 text-xl">
                         ⏳
                     </div>
-                    <p class="text-sm font-bold text-gray-400">No active profile logs</p>
+                    <p class="text-sm font-bold text-gray-400">Loading history...</p>
                 </div>
             </div>
         </main>
 
-        <!-- 1. REGISTRATION -->
         <main id="intro-view" class="hidden px-6 pt-6 fade-in">
             <button onclick="goHome()" class="mb-6 text-sm font-bold text-gray-400">← Exit</button>
             <div class="luxury-card p-8 text-center">
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔑</div>
-                <h2 class="text-2xl font-bold mb-2">Visual Personality Test</h2>
-                <p class="text-gray-400 text-sm mb-10">Enter your details to begin the psychometric assessment.</p>
-                <div class="text-left">
-                    <div class="input-group">
-                        <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
-                        <label class="fashion-label">Agent Alias</label>
-                    </div>
+                
+                <div id="auth-ui">
+                    <p class="text-sm text-gray-400">Connecting to server...</p>
                 </div>
-                <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl mt-4">Initialize Ritual</button>
             </div>
         </main>
 
-        <!-- 2. QUIZ (Dynamic Layout) -->
         <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="goHome()" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cancel</button>
@@ -369,7 +355,6 @@
                 <h2 id="quiz-title" class="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-4">Step 1</h2>
                 <p id="quiz-question" class="text-xl font-bold text-gray-800 mb-8 leading-relaxed"></p>
                 
-                <!-- Container for either Grid or Bubbles -->
                 <div id="quiz-content-area" class="w-full"></div>
             </div>
             
@@ -379,7 +364,6 @@
             </div>
         </main>
 
-        <!-- 3. DATE -->
         <main id="date-view" class="hidden px-6 pt-6 fade-in">
             <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Temporal Lock</h2>
@@ -403,7 +387,6 @@
             </div>
         </main>
 
-        <!-- 4. URDU NAME -->
         <main id="name-view" class="hidden px-6 pt-6 fade-in">
             <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Spiritual Key</h2>
@@ -420,21 +403,18 @@
             </div>
         </main>
 
-        <!-- 5. PROCESSING -->
         <main id="processing-view" class="hidden px-6 flex flex-col items-center justify-center min-h-[60vh] text-center">
             <div class="processing-orb"></div>
             <h2 id="process-text" class="text-2xl font-bold text-gray-900 mb-2">Synchronizing...</h2>
             <p class="text-gray-400 text-sm">Accessing cosmic records</p>
         </main>
 
-        <!-- 6. RESULTS -->
         <main id="result-view" class="hidden px-6 pt-12 pb-20 fade-in">
             <div class="text-center mb-10">
                 <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Ritual Complete</p>
                 <h2 id="final-user-name" class="text-3xl font-bold text-gray-900"></h2>
             </div>
 
-            <!-- Primary Element Card -->
             <div id="element-card" class="luxury-card p-8 mb-8 text-white relative" style="background: var(--grad-cosmic)">
                 <div class="relative z-10">
                     <h1 id="display-name" class="text-5xl font-bold urdu text-center mb-6"></h1>
@@ -456,7 +436,6 @@
                 </div>
             </div>
 
-            <!-- Zodiac Insight -->
             <div class="luxury-card p-6 mb-8 flex items-center gap-6">
                 <div id="zodiac-icon" class="text-5xl"></div>
                 <div>
@@ -466,7 +445,6 @@
                 </div>
             </div>
 
-            <!-- Radar Chart -->
             <div class="luxury-card p-8 mb-8">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Elemental Spectrum</h3>
                 <div class="chart-container">
@@ -474,7 +452,6 @@
                 </div>
             </div>
 
-            <!-- Abjad Matches -->
             <div class="luxury-card p-8 border-emerald-100 bg-emerald-50/30">
                 <div class="flex justify-between items-center mb-8">
                     <div>
@@ -490,6 +467,21 @@
         </main>
 
     </div>
+
+    <template id="tmpl-login">
+        <h2 class="text-2xl font-bold mb-4">Identity Verification</h2>
+        <p class="text-gray-400 text-sm mb-8">Access the matrix using your Google credentials.</p>
+        <a href="/auth/google" class="btn-fancy w-full py-4 rounded-xl block flex items-center justify-center gap-2">
+            LOGIN WITH GOOGLE
+        </a>
+    </template>
+
+    <template id="tmpl-welcome">
+        <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
+        <h3 class="text-xl text-indigo-600 font-bold mb-8" id="user-display-name">Agent</h3>
+        <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl">Initialize Ritual</button>
+        <a href="/api/logout" class="block mt-4 text-xs text-gray-400 font-bold uppercase hover:text-red-400">End Session (Logout)</a>
+    </template>
 
     <script>
         // --- CONSTANTS & DATA ---
@@ -572,6 +564,8 @@
             birthMonth: null,
             chart: null
         };
+        
+        let currentUser = null; // AUTH STATE
 
         // --- HELPERS ---
         function showAlert(msg) {
@@ -589,16 +583,86 @@
             window.scrollTo(0,0);
         }
 
+        // --- AUTH & LOAD LOGIC ---
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/current_user');
+                const user = await res.json();
+                const ui = document.getElementById('auth-ui');
+                
+                if (user && user.googleId) {
+                    currentUser = user;
+                    // Show Welcome UI
+                    const tmpl = document.getElementById('tmpl-welcome').content.cloneNode(true);
+                    tmpl.querySelector('#user-display-name').innerText = user.displayName;
+                    ui.innerHTML = '';
+                    ui.appendChild(tmpl);
+                    
+                    // Auto-set name
+                    appState.userName = user.displayName;
+                    
+                    // Load History
+                    loadHistory();
+                } else {
+                    // Show Login UI
+                    const tmpl = document.getElementById('tmpl-login').content.cloneNode(true);
+                    ui.innerHTML = '';
+                    ui.appendChild(tmpl);
+                }
+            } catch (e) {
+                console.log("Auth check failed or dev mode", e);
+                // Fallback for non-server local testing
+                const ui = document.getElementById('auth-ui');
+                if (ui) ui.innerHTML = `<p class="text-sm text-red-400">Server offline. <br> <span class="text-xs cursor-pointer underline" onclick="enableDevMode()">Enable Dev Mode</span></p>`;
+            }
+        }
+        
+        function enableDevMode() {
+             appState.userName = "Dev Agent";
+             document.getElementById('auth-ui').innerHTML = `
+                <h3 class="font-bold mb-4">Dev Mode Active</h3>
+                <button onclick="goToIntro()" class="btn-fancy w-full py-2 rounded-xl">Start</button>
+             `;
+        }
+
+        async function loadHistory() {
+            try {
+                const res = await fetch('/api/history');
+                const history = await res.json();
+                const container = document.getElementById('history-container');
+                
+                if (history.length > 0) {
+                    container.innerHTML = '';
+                    history.forEach(h => {
+                        const date = new Date(h.date).toLocaleDateString();
+                        container.innerHTML += `
+                            <div class="luxury-card p-4 mb-3 flex justify-between items-center border-l-4 border-indigo-500">
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm">${h.element} | ${h.zodiac}</p>
+                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest">${date}</p>
+                                </div>
+                                <div class="urdu text-lg">${h.urduName}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = `<div class="luxury-card p-6 flex items-center gap-4 border-dashed border-2 border-gray-100 bg-gray-50/50"><p class="text-sm font-bold text-gray-400">No active profile logs</p></div>`;
+                }
+            } catch(e) { console.log("History load failed"); }
+        }
+
         // --- NAVIGATION ---
         function openApp(id) { switchView(id); }
         function goHome() { switchView('home-view'); }
 
         function goToIntro() {
-            const val = document.getElementById('reg-name').value;
+            // If manual input still exists (dev mode), use it, else use auth name
+            const valInput = document.getElementById('reg-name');
+            const val = valInput ? valInput.value : appState.userName;
+            
             if(!val) return showAlert("Identity required.");
             appState.userName = val;
             appState.currentStep = 0;
-            // Reset scores
             appState.scores = { Fire: 0, Water: 0, Air: 0, Earth: 0 };
             switchView('quiz-view');
             renderQuiz();
@@ -703,18 +767,12 @@
 
             // Logic: 0-6 index maps to score. 
             // 0=Strong Disagree (1pt), 6=Strong Agree (7pts)
-            // 3=Neutral (3.5pts? No, simpler to just add weighted score)
-            
-            // Let's use a 1-7 points system
             const score = index + 1; 
             
-            // Add to target element score
-            // If the question was "reverse coded", we would flip logic here. Assuming direct questions for now.
             if(appState.scores[targetElement] !== undefined) {
                 appState.scores[targetElement] += score;
             }
 
-            // Delay for UX
             setTimeout(() => {
                 appState.currentStep++;
                 renderQuiz();
@@ -722,7 +780,6 @@
         }
 
         function handleImageAnswer(type) {
-            // Images are powerful subconscious indicators. Give a substantial boost (e.g., +10 points)
             if(appState.scores[type] !== undefined) {
                 appState.scores[type] += 10;
             }
@@ -806,6 +863,20 @@
             renderAbjadMatches(abjad);
             renderChart(scores);
 
+            // --- SAVE TO BACKEND ---
+            if (currentUser) {
+                fetch('/api/results', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        element: winnerKey,
+                        zodiac: zodiac.name,
+                        abjadScore: abjad,
+                        urduName: urdu
+                    })
+                }).then(() => console.log("Data synced to cosmic record."));
+            }
+
             switchView('result-view');
         }
 
@@ -865,6 +936,7 @@
         // Boot
         window.onload = () => {
             console.log("System Initialized.");
+            checkAuth(); // Check for backend session
         };
     </script>
 </body>
