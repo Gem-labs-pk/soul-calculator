@@ -19,17 +19,15 @@
     <!-- Sticky Header -->
     <header class="dashboard-header w-full max-w-lg">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                <span class="text-2xl">🔮</span>
             </div>
             <div>
-                <h1 class="font-bold text-lg leading-none">Gem Store</h1>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Labs Edition</p>
+                <h1 class="font-bold text-lg leading-none text-gray-900">Soul Calc</h1>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Premium Edition</p>
             </div>
         </div>
-        <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+        <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -37,7 +35,7 @@
     </header>
 
     <!-- Side Menu -->
-    <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto">
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto bg-white border-r border-gray-100">
         <div class="flex justify-between items-center mb-10 pt-4">
             <h2 class="text-xl font-bold tracking-widest text-gray-900">INFO</h2>
             <button onclick="toggleMenu()" class="text-gray-400 hover:text-gray-900 text-2xl">&times;</button>
@@ -53,11 +51,17 @@
             </div>
             <div>
                 <div class="menu-header" onclick="toggleAccordion(this)">
-                    <h3 class="text-xs font-bold uppercase tracking-widest">Developer</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-widest">Contributors</h3>
                 </div>
                 <div class="menu-content text-sm text-gray-500">
-                    <p class="font-bold text-gray-900">Muzammil Mahmood</p>
-                    <p>Software Engineer</p>
+                    <div class="mb-3">
+                        <p class="font-bold text-gray-900">Muzammil Mahmood</p>
+                        <p class="text-xs">Software Engineer</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-900">Saqib Zahid</p>
+                        <p class="text-xs">Contributor</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,7 +128,7 @@
                     </div>
                     <span class="app-label">Tarot</span>
                 </div>
-                <!-- App 6 -->
+                 <!-- App 6 -->
                  <div class="app-icon-wrapper">
                     <div class="app-icon text-gray-500">
                         <span class="text-2xl">⚙️</span>
@@ -174,23 +178,25 @@
             </div>
         </main>
 
-        <!-- 1. TRAITS -->
+        <!-- 1. TRAITS (Now Visual Quiz) -->
         <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="goHome()" class="text-sm font-bold text-gray-400">Cancel</button>
                 <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">Step 1/3</span>
             </div>
-            <h2 class="text-3xl font-bold mb-2">Core Data</h2>
-            <p class="text-gray-400 text-sm mb-8">Select 3 or more traits that define you.</p>
+            <h2 class="text-2xl font-bold mb-2">Ritual</h2>
+            <p class="text-gray-400 text-sm mb-6">Select the imagery that calls to you.</p>
             
-            <div id="trait-grid" class="grid grid-cols-2 gap-3 mb-24"></div>
+            <!-- Grid for Images -->
+            <div id="trait-grid" class="grid grid-cols-2 gap-4 mb-24"></div>
             
-            <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur border-t border-gray-100 p-6 flex justify-between items-center z-50">
+            <div id="quiz-footer" class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur border-t border-gray-100 p-6 flex justify-between items-center z-50">
                 <div>
-                    <span class="text-xs text-gray-400 uppercase tracking-widest">Selected</span>
-                    <span id="counter" class="block text-3xl font-bold text-gray-900">0</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Progress</span>
+                    <span id="counter" class="block text-3xl font-bold text-gray-900">0%</span>
                 </div>
-                <button onclick="goToDateView()" class="btn-fancy px-8 py-3 rounded-xl shadow-lg shadow-indigo-200">Next Step →</button>
+                <!-- Note: Main navigation is now handled by selecting images -->
+                <div class="text-xs text-gray-400 font-bold uppercase tracking-widest">Select Image to Proceed</div>
             </div>
         </main>
 
@@ -262,11 +268,9 @@
                 <h2 id="final-user-name" class="text-3xl font-bold text-gray-900"></h2>
             </div>
 
-            <!-- Element Card (Now with Gradient BG inside) -->
+            <!-- Element Card -->
             <div class="luxury-card p-8 mb-6 text-white overflow-hidden relative" style="background: var(--grad-cosmic);">
-                <!-- Glow Effect -->
                 <div id="element-glow" class="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500 blur-[80px] rounded-full opacity-50"></div>
-                
                 <div class="relative z-10 text-center">
                     <span class="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] block mb-4">My Holy Name</span>
                     <h1 id="display-name" class="text-5xl font-bold urdu mb-8"></h1>
