@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soul Calculator | Visual Personality Test</title>
+    <title>Soul Calculator | Visual Personality Matrix</title>
     
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Outfit:wght@300;400;500;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -189,7 +191,6 @@
             position: relative;
         }
         
-        /* Line behind bubbles */
         .bubble-track {
             position: absolute;
             left: 0; right: 0; top: 50%;
@@ -212,17 +213,14 @@
         .bubble-btn:hover { transform: scale(1.15); }
         .bubble-btn.selected { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-        /* Sizes based on position (0-6) */
         .b-size-0, .b-size-6 { width: 56px; height: 56px; }
         .b-size-1, .b-size-5 { width: 44px; height: 44px; }
         .b-size-2, .b-size-4 { width: 32px; height: 32px; }
         .b-size-3 { width: 24px; height: 24px; background: var(--col-neutral); border-color: transparent; }
 
-        /* Colors */
         .b-disagree { border-color: var(--col-disagree); }
         .b-agree { border-color: var(--col-agree); }
         
-        /* Fill on Select */
         .b-disagree.selected { background: var(--col-disagree); }
         .b-agree.selected { background: var(--col-agree); }
         .b-neutral.selected { background: #9ca3af; transform: scale(1.3); }
@@ -239,11 +237,11 @@
         }
         .label-disagree { color: var(--col-disagree); }
         .label-agree { color: var(--col-agree); }
-
     </style>
 </head>
 <body class="flex flex-col items-center">
 
+    <!-- Alert Modal -->
     <div id="custom-alert">
         <div class="bg-white p-8 rounded-3xl max-w-xs w-full text-center shadow-2xl">
             <div class="text-4xl mb-4">⚠️</div>
@@ -252,6 +250,7 @@
         </div>
     </div>
 
+    <!-- Header -->
     <header class="dashboard-header w-full max-w-lg">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
@@ -259,7 +258,7 @@
             </div>
             <div>
                 <h1 class="font-bold text-lg leading-none text-gray-900">Soul Calc</h1>
-                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">V2.0 Premium</p>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">V2.0 Clean</p>
             </div>
         </div>
         <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center">
@@ -269,6 +268,7 @@
         </button>
     </header>
 
+    <!-- Side Menu -->
     <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto bg-white border-r border-gray-100">
         <div class="flex justify-between items-center mb-10 pt-4">
             <h2 class="text-xl font-bold tracking-widest text-gray-900">SYSTEM</h2>
@@ -280,18 +280,19 @@
                 <p class="text-sm text-gray-500 leading-relaxed">Merging Elemental Traits, Zodiac Archetypes, and Ancient Abjad Numerology.</p>
             </div>
             <div>
-                <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-2">Contributors</h3>
-                <p class="text-sm font-bold text-gray-900">Muzammil Mahmood</p>
-                <p class="text-xs text-gray-500">Lead Engineer</p>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-2">Clean Edition</h3>
+                <p class="text-sm font-bold text-gray-900">Gem Labs</p>
+                <p class="text-xs text-gray-500">Single File Optimization</p>
             </div>
-            <button onclick="resetApp()" class="w-full py-4 border-2 border-red-50 text-red-500 rounded-2xl text-xs font-bold uppercase tracking-widest mt-12 hover:bg-red-50 transition-colors">
-                Reset Matrix
+            <button onclick="resetData()" class="w-full py-4 border-2 border-red-50 text-red-500 rounded-2xl text-xs font-bold uppercase tracking-widest mt-12 hover:bg-red-50 transition-colors">
+                Factory Reset
             </button>
         </div>
     </div>
 
     <div class="w-full max-w-lg pb-24">
 
+        <!-- HOME VIEW -->
         <main id="home-view" class="fade-in">
             <p class="px-6 mt-8 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Featured Highlight</p>
             <div class="carousel-container">
@@ -321,28 +322,33 @@
                 </div>
             </div>
 
-            <p class="px-6 mt-12 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Session History</p>
+            <p class="px-6 mt-12 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">Local History</p>
             <div class="px-6" id="history-container">
-                <div class="luxury-card p-6 flex items-center gap-4 border-dashed border-2 border-gray-100 bg-gray-50/50">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-gray-300 text-xl">
-                        ⏳
-                    </div>
-                    <p class="text-sm font-bold text-gray-400">Loading history...</p>
-                </div>
+                <!-- History items injected here -->
             </div>
         </main>
 
+        <!-- INTRO / LOGIN VIEW -->
         <main id="intro-view" class="hidden px-6 pt-6 fade-in">
             <button onclick="goHome()" class="mb-6 text-sm font-bold text-gray-400">← Exit</button>
             <div class="luxury-card p-8 text-center">
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔑</div>
                 
                 <div id="auth-ui">
-                    <p class="text-sm text-gray-400">Connecting to server...</p>
+                    <h2 class="text-2xl font-bold mb-4">Identity Protocol</h2>
+                    <p class="text-gray-400 text-sm mb-8">Enter your designation to access the matrix.</p>
+                    <div class="input-group text-left mb-8">
+                        <input type="text" id="agent-name" class="fashion-input" placeholder=" " autocomplete="off">
+                        <label class="fashion-label">Agent Name</label>
+                    </div>
+                    <button onclick="handleLogin()" class="btn-fancy w-full py-4 rounded-xl block flex items-center justify-center gap-2">
+                        INITIALIZE RITUAL
+                    </button>
                 </div>
             </div>
         </main>
 
+        <!-- QUIZ VIEW -->
         <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="goHome()" class="text-xs font-bold text-gray-400 uppercase tracking-widest">Cancel</button>
@@ -364,6 +370,7 @@
             </div>
         </main>
 
+        <!-- DATE VIEW -->
         <main id="date-view" class="hidden px-6 pt-6 fade-in">
             <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Temporal Lock</h2>
@@ -371,7 +378,7 @@
                 <div class="text-left space-y-8 mb-10">
                     <div>
                         <label class="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em] mb-3 block">Month of Arrival</label>
-                        <select id="birth-month" class="fashion-input cursor-pointer">
+                        <select id="birth-month" class="fashion-input cursor-pointer bg-transparent">
                             <option value="1">January</option><option value="2">February</option><option value="3">March</option>
                             <option value="4">April</option><option value="5">May</option><option value="6">June</option>
                             <option value="7">July</option><option value="8">August</option><option value="9">September</option>
@@ -387,6 +394,7 @@
             </div>
         </main>
 
+        <!-- NAME VIEW (URDU) -->
         <main id="name-view" class="hidden px-6 pt-6 fade-in">
             <div class="luxury-card p-8 text-center mt-12">
                 <h2 class="text-2xl font-bold mb-2">Spiritual Key</h2>
@@ -403,12 +411,14 @@
             </div>
         </main>
 
+        <!-- PROCESSING VIEW -->
         <main id="processing-view" class="hidden px-6 flex flex-col items-center justify-center min-h-[60vh] text-center">
             <div class="processing-orb"></div>
             <h2 id="process-text" class="text-2xl font-bold text-gray-900 mb-2">Synchronizing...</h2>
             <p class="text-gray-400 text-sm">Accessing cosmic records</p>
         </main>
 
+        <!-- RESULT VIEW -->
         <main id="result-view" class="hidden px-6 pt-12 pb-20 fade-in">
             <div class="text-center mb-10">
                 <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Ritual Complete</p>
@@ -468,23 +478,8 @@
 
     </div>
 
-    <template id="tmpl-login">
-        <h2 class="text-2xl font-bold mb-4">Identity Verification</h2>
-        <p class="text-gray-400 text-sm mb-8">Access the matrix using your Google credentials.</p>
-        <a href="/auth/google" class="btn-fancy w-full py-4 rounded-xl block flex items-center justify-center gap-2">
-            LOGIN WITH GOOGLE
-        </a>
-    </template>
-
-    <template id="tmpl-welcome">
-        <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
-        <h3 class="text-xl text-indigo-600 font-bold mb-8" id="user-display-name">Agent</h3>
-        <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl">Initialize Ritual</button>
-        <a href="/api/logout" class="block mt-4 text-xs text-gray-400 font-bold uppercase hover:text-red-400">End Session (Logout)</a>
-    </template>
-
     <script>
-        // --- CONSTANTS & DATA ---
+        // --- DATA CONSTANTS ---
         const ABJAD_MAP = {'ا': 1, 'آ': 1, 'أ': 1, 'إ': 1, 'ء': 1, 'ب': 2, 'پ': 2, 'ج': 3, 'چ': 3, 'د': 4, 'ڈ': 4, 'ه': 5, 'ہ': 5, 'ة': 5, 'ھ': 5, 'و': 6, 'ؤ': 6, 'ز': 7, 'ژ': 7, 'ح': 8, 'ط': 9, 'ی': 10, 'ي': 10, 'ى': 10, 'ئ': 10, 'ے': 10, 'ک': 20, 'ك': 20, 'گ': 20, 'ل': 30, 'م': 40, 'ن': 50, 'ں': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90, 'ق': 100, 'ر': 200, 'ڑ': 200, 'ش': 300, 'ت': 400, 'ٹ': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000};
 
         const ELEMENTS = {
@@ -517,32 +512,17 @@
             { a: "السلام", t: "As-Salam", s: 131, m: "سلامتی والا" },
             { a: "العزيز", t: "Al-Aziz", s: 94, m: "غالب" },
             { a: "الودود", t: "Al-Wadud", s: 20, m: "محبت کرنے والا" },
-            { a: "النور", t: "An-Nur", s: 256, m: "روشن کرنے والا" }
+            { a: "النور", t: "An-Nur", s: 256, m: "روشن کرنے والا" },
+            { a: "الحق", t: "Al-Haqq", s: 108, m: "سچا" },
+            { a: "المبين", t: "Al-Mubin", s: 102, m: "ظاہر کرنے والا" },
+            { a: "العليم", t: "Al-Alim", s: 150, m: "سب کچھ جاننے والا" }
         ];
 
-        // --- NEW LOGIC ENGINE DATA ---
-        // Mixed Types: 'scale' for psychometrics, 'image' for visual subconcious
         const QUIZ_STEPS = [
-            {
-                type: 'scale',
-                q: "I often make decisions based on my gut feelings rather than logical analysis.",
-                target: 'Water', // High agreement = Water
-            },
-            {
-                type: 'scale',
-                q: "I feel most energized when I am taking charge of a situation or leading others.",
-                target: 'Fire', // High agreement = Fire
-            },
-            {
-                type: 'scale',
-                q: "I prefer stability, clear plans, and established routines over spontaneity.",
-                target: 'Earth', // High agreement = Earth
-            },
-            {
-                type: 'scale',
-                q: "I enjoy discussing abstract ideas, theories, and possibilities more than practical details.",
-                target: 'Air', // High agreement = Air
-            },
+            { type: 'scale', q: "I often make decisions based on my gut feelings rather than logical analysis.", target: 'Water' },
+            { type: 'scale', q: "I feel most energized when I am taking charge of a situation or leading others.", target: 'Fire' },
+            { type: 'scale', q: "I prefer stability, clear plans, and established routines over spontaneity.", target: 'Earth' },
+            { type: 'scale', q: "I enjoy discussing abstract ideas, theories, and possibilities more than practical details.", target: 'Air' },
             {
                 type: 'image',
                 q: "The gateway to your soul appears. What does it look like?",
@@ -564,8 +544,6 @@
             birthMonth: null,
             chart: null
         };
-        
-        let currentUser = null; // AUTH STATE
 
         // --- HELPERS ---
         function showAlert(msg) {
@@ -573,9 +551,8 @@
             document.getElementById('custom-alert').style.display = 'flex';
         }
         function closeAlert() { document.getElementById('custom-alert').style.display = 'none'; }
-
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
-
+        
         function switchView(toId) {
             const views = ['home-view', 'intro-view', 'quiz-view', 'date-view', 'name-view', 'processing-view', 'result-view'];
             views.forEach(v => document.getElementById(v).classList.add('hidden'));
@@ -583,92 +560,98 @@
             window.scrollTo(0,0);
         }
 
-        // --- AUTH & LOAD LOGIC ---
-        async function checkAuth() {
-            try {
-                const res = await fetch('/api/current_user');
-                const user = await res.json();
-                const ui = document.getElementById('auth-ui');
-                
-                if (user && user.googleId) {
-                    currentUser = user;
-                    // Show Welcome UI
-                    const tmpl = document.getElementById('tmpl-welcome').content.cloneNode(true);
-                    tmpl.querySelector('#user-display-name').innerText = user.displayName;
-                    ui.innerHTML = '';
-                    ui.appendChild(tmpl);
-                    
-                    // Auto-set name
-                    appState.userName = user.displayName;
-                    
-                    // Load History
-                    loadHistory();
-                } else {
-                    // Show Login UI
-                    const tmpl = document.getElementById('tmpl-login').content.cloneNode(true);
-                    ui.innerHTML = '';
-                    ui.appendChild(tmpl);
-                }
-            } catch (e) {
-                console.log("Auth check failed or dev mode", e);
-                // Fallback for non-server local testing
-                const ui = document.getElementById('auth-ui');
-                if (ui) ui.innerHTML = `<p class="text-sm text-red-400">Server offline. <br> <span class="text-xs cursor-pointer underline" onclick="enableDevMode()">Enable Dev Mode</span></p>`;
+        // --- LOCAL STORAGE MANAGER ---
+        function getHistory() {
+            const h = localStorage.getItem('soul_calc_history');
+            return h ? JSON.parse(h) : [];
+        }
+
+        function saveHistoryItem(item) {
+            const h = getHistory();
+            h.unshift(item); // Add to top
+            if(h.length > 5) h.pop(); // Keep last 5
+            localStorage.setItem('soul_calc_history', JSON.stringify(h));
+        }
+
+        function getUserIdentity() {
+            return localStorage.getItem('soul_calc_user');
+        }
+
+        function setUserIdentity(name) {
+            localStorage.setItem('soul_calc_user', name);
+            appState.userName = name;
+        }
+
+        function resetData() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // --- LOGIC FLOW ---
+        function initApp() {
+            // Load History on Home
+            const h = getHistory();
+            const container = document.getElementById('history-container');
+            if (h.length > 0) {
+                container.innerHTML = '';
+                h.forEach(rec => {
+                    const date = new Date(rec.date).toLocaleDateString();
+                    container.innerHTML += `
+                        <div class="luxury-card p-4 mb-3 flex justify-between items-center border-l-4 border-indigo-500">
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">${rec.element} | ${rec.zodiac}</p>
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest">${date}</p>
+                            </div>
+                            <div class="urdu text-lg">${rec.urduName}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = `<div class="luxury-card p-6 flex items-center gap-4 border-dashed border-2 border-gray-100 bg-gray-50/50"><p class="text-sm font-bold text-gray-400">No active profile logs</p></div>`;
+            }
+
+            // Check for existing user
+            const user = getUserIdentity();
+            if(user) {
+                // If user exists, pre-fill or adjust UI if needed
+                document.getElementById('agent-name').value = user;
             }
         }
-        
-        function enableDevMode() {
-             appState.userName = "Dev Agent";
-             document.getElementById('auth-ui').innerHTML = `
-                <h3 class="font-bold mb-4">Dev Mode Active</h3>
-                <button onclick="goToIntro()" class="btn-fancy w-full py-2 rounded-xl">Start</button>
-             `;
-        }
 
-        async function loadHistory() {
-            try {
-                const res = await fetch('/api/history');
-                const history = await res.json();
-                const container = document.getElementById('history-container');
-                
-                if (history.length > 0) {
-                    container.innerHTML = '';
-                    history.forEach(h => {
-                        const date = new Date(h.date).toLocaleDateString();
-                        container.innerHTML += `
-                            <div class="luxury-card p-4 mb-3 flex justify-between items-center border-l-4 border-indigo-500">
-                                <div>
-                                    <p class="font-bold text-gray-800 text-sm">${h.element} | ${h.zodiac}</p>
-                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest">${date}</p>
-                                </div>
-                                <div class="urdu text-lg">${h.urduName}</div>
-                            </div>
-                        `;
-                    });
-                } else {
-                    container.innerHTML = `<div class="luxury-card p-6 flex items-center gap-4 border-dashed border-2 border-gray-100 bg-gray-50/50"><p class="text-sm font-bold text-gray-400">No active profile logs</p></div>`;
+        function openApp(view) {
+            if(view === 'intro-view') {
+                const user = getUserIdentity();
+                if(user) {
+                    // If already logged in, show "Welcome Back" style or just fill name
+                    document.getElementById('auth-ui').innerHTML = `
+                        <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
+                        <h3 class="text-xl text-indigo-600 font-bold mb-8">${user}</h3>
+                        <button onclick="startQuizSequence('${user}')" class="btn-fancy w-full py-4 rounded-xl">Initialize Ritual</button>
+                        <button onclick="resetData()" class="block w-full mt-4 text-xs text-gray-400 font-bold uppercase hover:text-red-400">Switch Identity</button>
+                    `;
                 }
-            } catch(e) { console.log("History load failed"); }
+            }
+            switchView(view);
         }
 
-        // --- NAVIGATION ---
-        function openApp(id) { switchView(id); }
         function goHome() { switchView('home-view'); }
 
-        function goToIntro() {
-            // If manual input still exists (dev mode), use it, else use auth name
-            const valInput = document.getElementById('reg-name');
-            const val = valInput ? valInput.value : appState.userName;
-            
-            if(!val) return showAlert("Identity required.");
-            appState.userName = val;
+        function handleLogin() {
+            const name = document.getElementById('agent-name').value.trim();
+            if(!name) return showAlert("Identity designation required.");
+            setUserIdentity(name);
+            startQuizSequence(name);
+        }
+
+        function startQuizSequence(name) {
+            appState.userName = name;
             appState.currentStep = 0;
             appState.scores = { Fire: 0, Water: 0, Air: 0, Earth: 0 };
             switchView('quiz-view');
             renderQuiz();
         }
 
-        // --- LOGIC ENGINE ---
+        // --- QUIZ ENGINE ---
         function renderQuiz() {
             const step = QUIZ_STEPS[appState.currentStep];
             if(!step) return finishQuiz();
@@ -679,13 +662,11 @@
             const counter = document.getElementById('counter');
             const progressBar = document.getElementById('quiz-progress-bar');
 
-            // Update Header
             title.innerText = `Phase ${appState.currentStep + 1}`;
             question.innerText = step.q;
             counter.innerText = `${Math.round((appState.currentStep / QUIZ_STEPS.length) * 100)}%`;
             progressBar.style.width = `${(appState.currentStep / QUIZ_STEPS.length) * 100}%`;
 
-            // Clear previous content
             contentArea.innerHTML = '';
 
             if (step.type === 'scale') {
@@ -696,29 +677,22 @@
         }
 
         function renderScaleQuestion(container, step) {
-            // Generate Bubble UI
             const wrapper = document.createElement('div');
             wrapper.className = "flex flex-col items-center w-full mt-8";
-
             const bubbleContainer = document.createElement('div');
             bubbleContainer.className = "bubble-container";
-
-            // Track Line
             const track = document.createElement('div');
             track.className = "bubble-track";
             bubbleContainer.appendChild(track);
 
-            // 7 Bubbles (0 to 6)
             for (let i = 0; i < 7; i++) {
                 const btn = document.createElement('div');
-                let sizeClass = 'b-size-3'; // Default neutral
-                let colorClass = 'b-neutral';
+                let sizeClass = 'b-size-3', colorClass = 'b-neutral';
 
-                // Assign Sizes and Colors based on position
                 if (i === 0) { sizeClass = 'b-size-0'; colorClass = 'b-disagree'; }
                 else if (i === 1) { sizeClass = 'b-size-1'; colorClass = 'b-disagree'; }
                 else if (i === 2) { sizeClass = 'b-size-2'; colorClass = 'b-disagree'; }
-                else if (i === 3) { sizeClass = 'b-size-3'; colorClass = 'b-neutral'; } // Middle
+                else if (i === 3) { sizeClass = 'b-size-3'; colorClass = 'b-neutral'; }
                 else if (i === 4) { sizeClass = 'b-size-4'; colorClass = 'b-agree'; }
                 else if (i === 5) { sizeClass = 'b-size-5'; colorClass = 'b-agree'; }
                 else if (i === 6) { sizeClass = 'b-size-6'; colorClass = 'b-agree'; }
@@ -728,14 +702,10 @@
                 bubbleContainer.appendChild(btn);
             }
 
-            // Labels
             const labels = document.createElement('div');
             labels.className = "scale-labels";
-            labels.innerHTML = `
-                <span class="label-disagree">Disagree</span>
-                <span class="label-agree">Agree</span>
-            `;
-
+            labels.innerHTML = `<span class="label-disagree">Disagree</span><span class="label-agree">Agree</span>`;
+            
             wrapper.appendChild(bubbleContainer);
             wrapper.appendChild(labels);
             container.appendChild(wrapper);
@@ -744,7 +714,6 @@
         function renderImageQuestion(container, step) {
             const grid = document.createElement('div');
             grid.className = "grid grid-cols-2 gap-4 w-full";
-            
             step.o.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'relative group overflow-hidden rounded-2xl aspect-square shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-indigo-500';
@@ -761,35 +730,20 @@
         }
 
         function handleScaleAnswer(index, targetElement, btnElement) {
-            // Visual Feedback
             document.querySelectorAll('.bubble-btn').forEach(b => b.classList.remove('selected'));
             btnElement.classList.add('selected');
-
-            // Logic: 0-6 index maps to score. 
-            // 0=Strong Disagree (1pt), 6=Strong Agree (7pts)
             const score = index + 1; 
-            
-            if(appState.scores[targetElement] !== undefined) {
-                appState.scores[targetElement] += score;
-            }
-
-            setTimeout(() => {
-                appState.currentStep++;
-                renderQuiz();
-            }, 400);
+            if(appState.scores[targetElement] !== undefined) appState.scores[targetElement] += score;
+            setTimeout(() => { appState.currentStep++; renderQuiz(); }, 400);
         }
 
         function handleImageAnswer(type) {
-            if(appState.scores[type] !== undefined) {
-                appState.scores[type] += 10;
-            }
+            if(appState.scores[type] !== undefined) appState.scores[type] += 10;
             appState.currentStep++;
             renderQuiz();
         }
 
-        function finishQuiz() {
-            switchView('date-view');
-        }
+        function finishQuiz() { switchView('date-view'); }
 
         function goToNameView() {
             const d = parseInt(document.getElementById('birth-day').value);
@@ -833,19 +787,19 @@
             for(let z of ZODIAC_DATA) {
                 if((m == z.start[0] && d >= z.start[1]) || (m == z.end[0] && d <= z.end[1])) return z;
             }
-            return ZODIAC_DATA[ZODIAC_DATA.length - 1]; // Capricorn fallback
+            return ZODIAC_DATA[ZODIAC_DATA.length - 1]; // Fallback
         }
 
         function generateResults(urdu) {
-            // Determine Winner based on accumulated scores
             const scores = appState.scores;
+            // Determine winner: Simple max score
             const winnerKey = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
             
             const winner = ELEMENTS[winnerKey];
             const zodiac = getZodiac(appState.birthDay, appState.birthMonth);
             const abjad = calcAbjad(urdu);
 
-            // Populate Results UI
+            // Render
             document.getElementById('final-user-name').innerText = appState.userName;
             document.getElementById('display-name').innerText = urdu;
             document.getElementById('winner-name').innerText = winnerKey;
@@ -863,19 +817,14 @@
             renderAbjadMatches(abjad);
             renderChart(scores);
 
-            // --- SAVE TO BACKEND ---
-            if (currentUser) {
-                fetch('/api/results', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        element: winnerKey,
-                        zodiac: zodiac.name,
-                        abjadScore: abjad,
-                        urduName: urdu
-                    })
-                }).then(() => console.log("Data synced to cosmic record."));
-            }
+            // Save to Local History
+            saveHistoryItem({
+                date: new Date().toISOString(),
+                element: winnerKey,
+                zodiac: zodiac.name,
+                urduName: urdu,
+                abjad: abjad
+            });
 
             switchView('result-view');
         }
@@ -884,7 +833,9 @@
             const container = document.getElementById('abjad-matches');
             container.innerHTML = '';
             
+            // Find close matches (Exact matches or within range)
             const matches = ASMA_UL_HUSNA.filter(n => n.s === sum);
+            // If no exact match, find closest
             const displayList = matches.length > 0 ? matches : [ASMA_UL_HUSNA.reduce((p, c) => Math.abs(c.s - sum) < Math.abs(p.s - sum) ? c : p)];
 
             displayList.forEach(m => {
@@ -933,11 +884,8 @@
 
         function resetApp() { location.reload(); }
 
-        // Boot
-        window.onload = () => {
-            console.log("System Initialized.");
-            checkAuth(); // Check for backend session
-        };
+        // Start
+        window.onload = initApp;
     </script>
 </body>
 </html>
