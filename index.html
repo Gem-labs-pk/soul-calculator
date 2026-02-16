@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soul Calculator | Sweet Edition</title>
+    <title>Soul Calculator | Premium Edition</title>
     
-    <meta name="theme-color" content="#0f0c29">
+    <meta name="theme-color" content="#FFFFFF">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
     <link rel="apple-touch-icon" href="./icon.svg">
@@ -16,310 +16,314 @@
 </head>
 <body class="flex flex-col items-center min-h-screen">
 
-    <div class="cosmic-void"></div>
-    <div class="nebula"></div>
-
-    <!-- Header / Nav -->
-    <nav class="w-full max-w-2xl px-6 pt-6 flex justify-between items-center z-50">
+    <!-- Sticky Header -->
+    <header class="dashboard-header w-full max-w-lg">
         <div class="flex items-center gap-3">
-            <button onclick="toggleMenu()" class="w-10 h-10 flex items-center justify-center bg-white/5 border border-white/10 rounded-xl active:scale-95 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+            <div class="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-            </button>
-            <h1 class="font-bold text-lg text-white tracking-widest stylish-font"><span class="text-[#00f3ff]">SOUL</span> CALC</h1>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-none">Gem Store</h1>
+                <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">Labs Edition</p>
+            </div>
         </div>
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#00f3ff] to-[#bd00ff] p-[2px]">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" class="w-full h-full rounded-full bg-black">
-        </div>
-    </nav>
+        <button onclick="toggleMenu()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+    </header>
 
     <!-- Side Menu -->
-    <div id="side-menu" class="fixed top-0 left-0 h-full w-80 bg-[#0f0c29]/95 backdrop-blur-xl border-r border-white/10 z-50 p-8 shadow-2xl overflow-y-auto">
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-80 z-50 p-8 shadow-2xl overflow-y-auto">
         <div class="flex justify-between items-center mb-10 pt-4">
-            <h2 class="text-xl font-bold text-fancy tracking-widest">INFO</h2>
-            <button onclick="toggleMenu()" class="text-white/50 hover:text-white text-2xl">&times;</button>
+            <h2 class="text-xl font-bold tracking-widest text-gray-900">INFO</h2>
+            <button onclick="toggleMenu()" class="text-gray-400 hover:text-gray-900 text-2xl">&times;</button>
         </div>
         <div class="space-y-2">
              <div>
                 <div class="menu-header" onclick="toggleAccordion(this)">
-                    <h3 class="text-[#00f3ff] text-xs font-bold uppercase tracking-[0.2em]">Details</h3>
-                    <span class="text-white text-xl font-light">+</span>
+                    <h3 class="text-xs font-bold uppercase tracking-widest">About Soul Calc</h3>
                 </div>
-                <div class="menu-content">
-                    <p class="text-sm text-white/70 leading-relaxed font-light">
-                        “Soul Elements is a premium profiling ritual. It merges Elemental Traits, Zodiac Astrology, and Abjad Numerology.”
-                    </p>
+                <div class="menu-content text-sm text-gray-500 leading-relaxed">
+                    A premium profiling ritual merging Elemental Traits, Zodiac Astrology, and Abjad Numerology.
                 </div>
             </div>
             <div>
                 <div class="menu-header" onclick="toggleAccordion(this)">
-                    <h3 class="text-[#ff0055] text-xs font-bold uppercase tracking-[0.2em]">Developer</h3>
-                    <span class="text-white text-xl font-light">+</span>
+                    <h3 class="text-xs font-bold uppercase tracking-widest">Developer</h3>
                 </div>
-                <div class="menu-content">
-                    <div class="space-y-1">
-                        <p class="text-white font-bold text-lg stylish-font text-gold-premium">Muzammil Mahmood</p>
-                        <p class="text-sm text-white/60">Software Engineer</p>
-                    </div>
+                <div class="menu-content text-sm text-gray-500">
+                    <p class="font-bold text-gray-900">Muzammil Mahmood</p>
+                    <p>Software Engineer</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- MAIN APP CONTAINER -->
-    <div class="w-full max-w-2xl px-4 relative z-10 mt-6 pb-24">
+    <div class="w-full max-w-lg relative z-10 pb-24">
 
         <!-- === HOME DASHBOARD === -->
         <main id="home-view" class="fade-in">
             
-            <!-- Featured Carousel -->
+            <!-- Featured Slides -->
+            <p class="section-title">Featured Highlights</p>
             <div class="carousel-container">
-                <!-- Slide 1 -->
                 <div class="slide-card group cursor-pointer" onclick="openApp('intro-view')">
-                    <div class="slide-bg bg-gradient-to-r from-purple-600 to-blue-600"></div>
-                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white uppercase tracking-widest w-fit mb-2 border border-white/20">Featured</span>
-                    <h3 class="text-2xl font-bold text-white mb-1">Discover Your Soul</h3>
-                    <p class="text-sm text-white/70">Take the full elemental ritual analysis.</p>
+                    <div class="slide-bg" style="background-image: linear-gradient(135deg, #6366f1, #a855f7);"></div>
+                    <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2">Featured</span>
+                    <h3 class="text-2xl font-bold mb-1">Discover Your Soul</h3>
+                    <p class="text-sm opacity-90">Take the full elemental ritual analysis today.</p>
                 </div>
-                <!-- Slide 2 -->
                 <div class="slide-card group">
-                    <div class="slide-bg bg-gradient-to-r from-pink-600 to-orange-500"></div>
-                    <span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] text-white uppercase tracking-widest w-fit mb-2 border border-white/20">Daily Cosmic</span>
-                    <h3 class="text-2xl font-bold text-white mb-1">Energy Reading</h3>
-                    <p class="text-sm text-white/70">Align your chakras for today.</p>
+                    <div class="slide-bg" style="background-image: linear-gradient(135deg, #f43f5e, #fb923c);"></div>
+                    <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2">Upcoming</span>
+                    <h3 class="text-2xl font-bold mb-1">Daily Energy</h3>
+                    <p class="text-sm opacity-90">Cosmic alignment tracking coming soon.</p>
                 </div>
             </div>
 
-            <!-- Quick Actions Grid -->
-            <h3 class="section-title">Cosmic Tools</h3>
+            <!-- Quick Icons -->
+            <p class="section-title">App Directory</p>
             <div class="quick-grid">
-                <!-- App 1: Soul Calculator -->
+                <!-- App 1 -->
                 <div class="app-icon-wrapper" onclick="openApp('intro-view')">
-                    <div class="app-icon border-purple-500/30">
+                    <div class="app-icon text-indigo-500">
                         <span class="text-2xl">🔮</span>
                     </div>
                     <span class="app-label">Soul Calc</span>
                 </div>
-                
-                <!-- App 2: Zodiac -->
+                <!-- App 2 -->
                 <div class="app-icon-wrapper">
-                    <div class="app-icon border-blue-500/30">
+                    <div class="app-icon text-purple-500">
                         <span class="text-2xl">♈</span>
                     </div>
                     <span class="app-label">Horoscope</span>
                 </div>
-
-                <!-- App 3: Numerology -->
+                <!-- App 3 -->
                 <div class="app-icon-wrapper">
-                    <div class="app-icon border-green-500/30">
+                    <div class="app-icon text-emerald-500">
                         <span class="text-2xl">🔢</span>
                     </div>
                     <span class="app-label">Abjad</span>
                 </div>
-
-                <!-- App 4: Love Match -->
+                <!-- App 4 -->
                 <div class="app-icon-wrapper">
-                    <div class="app-icon border-pink-500/30">
+                    <div class="app-icon text-rose-500">
                         <span class="text-2xl">❤️</span>
                     </div>
                     <span class="app-label">Love</span>
                 </div>
-
-                <!-- App 5: Tarot -->
+                <!-- App 5 -->
                 <div class="app-icon-wrapper">
-                    <div class="app-icon border-yellow-500/30">
+                    <div class="app-icon text-amber-500">
                         <span class="text-2xl">🃏</span>
                     </div>
                     <span class="app-label">Tarot</span>
                 </div>
-                 <!-- App 6: Settings -->
+                <!-- App 6 -->
                  <div class="app-icon-wrapper">
-                    <div class="app-icon border-white/30">
+                    <div class="app-icon text-gray-500">
                         <span class="text-2xl">⚙️</span>
                     </div>
                     <span class="app-label">Settings</span>
                 </div>
             </div>
 
-            <!-- Recent Results Banner -->
-            <h3 class="section-title">History</h3>
-            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
-                <div>
-                    <p class="text-white font-bold">No recent rituals</p>
-                    <p class="text-xs text-white/40">Your past results will appear here.</p>
-                </div>
-                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                    <span class="text-white/40">↻</span>
+            <!-- List Style History -->
+            <p class="section-title">History</p>
+            <div class="px-6">
+                <div class="luxury-card p-4 flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <span class="text-lg">↻</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm text-gray-900">No recent rituals</p>
+                        <p class="text-xs text-gray-400">Your results will appear here</p>
+                    </div>
                 </div>
             </div>
 
         </main>
 
-        <!-- === SUB-APPS (HIDDEN BY DEFAULT) === -->
+        <!-- === SUB-APPS === -->
 
         <!-- 0. REGISTRATION -->
-        <main id="intro-view" class="hidden luxury-card rounded-3xl p-10 md:p-16 fade-in text-center mt-4">
-            <button onclick="goHome()" class="absolute top-6 left-6 text-white/50 hover:text-white text-sm">← Home</button>
-            <h2 class="text-3xl mb-2 font-bold text-fancy mt-4">Access Matrix</h2>
-            <p class="text-white/60 text-sm mb-12">Verify identity to initialize sequence.</p>
-            <div class="text-left space-y-6">
-                <div class="input-group">
-                    <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
-                    <label class="fashion-label">Agent Name</label>
+        <main id="intro-view" class="hidden px-6 pt-6 fade-in">
+            <button onclick="goHome()" class="mb-6 flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gray-900">
+                <span>←</span> Back Home
+            </button>
+            <div class="luxury-card p-8 text-center">
+                <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔐</div>
+                <h2 class="text-2xl font-bold mb-2">Access Matrix</h2>
+                <p class="text-gray-400 text-sm mb-8">Verify identity to initialize sequence.</p>
+                <div class="text-left space-y-4">
+                    <div class="input-group">
+                        <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
+                        <label class="fashion-label">Agent Name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="reg-email" class="fashion-input" placeholder=" ">
+                        <label class="fashion-label">Gmail Account</label>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <input type="email" id="reg-email" class="fashion-input" placeholder=" ">
-                    <label class="fashion-label">Gmail Account</label>
-                </div>
+                <button onclick="goToIntro()" class="btn-fancy w-full py-4 rounded-xl mt-8">Initialize</button>
             </div>
-            <button onclick="goToIntro()" class="btn-fancy w-full py-5 rounded-xl mt-10 text-sm">Initialize</button>
         </main>
 
         <!-- 1. TRAITS -->
-        <main id="quiz-view" class="hidden luxury-card p-8 md:p-12 fade-in mt-4">
-            <button onclick="goHome()" class="absolute top-6 left-6 text-white/50 hover:text-white text-sm">✕</button>
-            <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl mb-2 font-bold text-fancy">Core Data</h2>
-                <p class="text-white/60 text-xs tracking-[0.2em] uppercase">Select 3+ Traits</p>
+        <main id="quiz-view" class="hidden px-6 pt-6 fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="goHome()" class="text-sm font-bold text-gray-400">Cancel</button>
+                <span class="text-xs font-bold uppercase tracking-widest text-indigo-500">Step 1/3</span>
             </div>
-            <div id="trait-grid" class="grid grid-cols-2 gap-3 mb-8"></div>
-            <div class="flex justify-between items-center border-t border-white/10 pt-6">
-                <div class="text-left">
-                    <span class="text-xs text-white/40 uppercase tracking-widest">Selected</span>
-                    <span id="counter" class="block text-3xl font-bold text-fancy">0</span>
+            <h2 class="text-3xl font-bold mb-2">Core Data</h2>
+            <p class="text-gray-400 text-sm mb-8">Select 3 or more traits that define you.</p>
+            
+            <div id="trait-grid" class="grid grid-cols-2 gap-3 mb-24"></div>
+            
+            <div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur border-t border-gray-100 p-6 flex justify-between items-center z-50">
+                <div>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Selected</span>
+                    <span id="counter" class="block text-3xl font-bold text-gray-900">0</span>
                 </div>
-                <button onclick="goToDateView()" class="btn-fancy px-8 py-3 rounded-xl text-sm">Proceed</button>
+                <button onclick="goToDateView()" class="btn-fancy px-8 py-3 rounded-xl shadow-lg shadow-indigo-200">Next Step →</button>
             </div>
         </main>
 
         <!-- 2. DATE -->
-        <main id="date-view" class="hidden luxury-card p-10 fade-in mt-4 text-center">
-             <button onclick="backToQuiz()" class="absolute top-6 left-6 text-white/50 hover:text-white text-sm">← Back</button>
-            <h2 class="text-2xl mb-2 font-bold text-fancy mt-6">Temporal Lock</h2>
-            <p class="text-white/60 text-xs mb-8 uppercase tracking-widest">Input Birth Coordinates</p>
-            <div class="space-y-6 mb-8">
-                <div class="text-left">
-                    <span class="text-xs text-[#00f3ff] uppercase tracking-widest mb-2 block">Month</span>
-                    <select id="birth-month" class="fashion-input bg-transparent">
-                        <option value="1" class="text-black">January</option>
-                        <option value="2" class="text-black">February</option>
-                        <option value="3" class="text-black">March</option>
-                        <option value="4" class="text-black">April</option>
-                        <option value="5" class="text-black">May</option>
-                        <option value="6" class="text-black">June</option>
-                        <option value="7" class="text-black">July</option>
-                        <option value="8" class="text-black">August</option>
-                        <option value="9" class="text-black">September</option>
-                        <option value="10" class="text-black">October</option>
-                        <option value="11" class="text-black">November</option>
-                        <option value="12" class="text-black">December</option>
-                    </select>
-                </div>
-                <div class="text-left">
-                    <div class="input-group mb-0">
+        <main id="date-view" class="hidden px-6 pt-6 fade-in">
+            <button onclick="backToQuiz()" class="mb-6 text-sm font-bold text-gray-400">← Back</button>
+            <div class="luxury-card p-8 text-center">
+                <h2 class="text-2xl font-bold mb-2">Temporal Lock</h2>
+                <p class="text-gray-400 text-sm mb-8">When did your journey begin?</p>
+                <div class="space-y-6 mb-8 text-left">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2 block">Month</span>
+                        <select id="birth-month" class="fashion-input bg-transparent">
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
                         <input type="number" id="birth-day" class="fashion-input" placeholder=" " min="1" max="31">
                         <label class="fashion-label">Day (01-31)</label>
                     </div>
                 </div>
+                <button onclick="goToNameView()" class="btn-fancy w-full py-4 rounded-xl">Next Phase</button>
             </div>
-            <button onclick="goToNameView()" class="btn-fancy px-12 py-4 rounded-xl w-full">Next Phase</button>
         </main>
 
         <!-- 3. URDU NAME -->
-        <main id="name-view" class="hidden luxury-card p-10 fade-in mt-4 text-center">
-            <button onclick="backToDate()" class="absolute top-6 left-6 text-white/50 hover:text-white text-sm">← Back</button>
-            <h2 class="text-2xl mb-2 font-bold text-fancy mt-6">Spiritual Key</h2>
-            <p class="text-white/60 text-xs mb-10 uppercase tracking-widest">Name in Urdu</p>
-            <div class="mb-12 relative max-w-md mx-auto">
-                <div class="input-group">
-                    <input type="text" id="user-name-urdu" class="fashion-input text-center text-4xl urdu-input" placeholder=" " dir="rtl" oninput="updateLiveCalc(this.value)">
-                    <label class="fashion-label text-center w-full" style="left:0">e.g. مزمل محمود</label>
+        <main id="name-view" class="hidden px-6 pt-6 fade-in">
+            <button onclick="backToDate()" class="mb-6 text-sm font-bold text-gray-400">← Back</button>
+            <div class="luxury-card p-8 text-center">
+                <h2 class="text-2xl font-bold mb-2">Spiritual Key</h2>
+                <p class="text-gray-400 text-sm mb-10">Enter your name in Urdu script.</p>
+                <div class="mb-12 relative">
+                    <div class="input-group">
+                        <input type="text" id="user-name-urdu" class="fashion-input text-center text-4xl urdu-input" placeholder=" " dir="rtl" oninput="updateLiveCalc(this.value)">
+                        <label class="fashion-label text-center w-full" style="left:0">e.g. مزمل محمود</label>
+                    </div>
+                    <p id="live-calc-preview" class="text-indigo-500 text-xs font-bold uppercase tracking-widest mt-2 opacity-0 transition-opacity">
+                        Calculated Value: <span id="live-score">0</span>
+                    </p>
                 </div>
-                <p id="live-calc-preview" class="text-[#00f3ff] text-xs uppercase tracking-widest mt-2 opacity-0 transition-opacity">
-                    Value: <span id="live-score">0</span>
-                </p>
+                <button onclick="startProcessing()" class="btn-fancy w-full py-4 rounded-xl shadow-lg shadow-indigo-200">Reveal Destiny</button>
             </div>
-            <button onclick="startProcessing()" class="btn-fancy px-12 py-4 rounded-xl w-full">Reveal Destiny</button>
         </main>
 
         <!-- 3.5 PROCESSING -->
-        <main id="processing-view" class="hidden luxury-card p-16 mt-4 text-center fade-in">
+        <main id="processing-view" class="hidden px-6 flex flex-col items-center justify-center min-h-[60vh] text-center fade-in">
             <div class="processing-orb"></div>
-            <h2 id="process-text" class="text-2xl font-bold text-white mb-2 animate-pulse">Aligning Stars...</h2>
+            <h2 id="process-text" class="text-2xl font-bold text-gray-900 mb-2">Aligning Stars...</h2>
+            <p class="text-gray-400 text-sm">Please wait while we calculate</p>
         </main>
 
         <!-- 4. RESULTS -->
-        <main id="result-view" class="hidden space-y-8 pb-20 fade-in mt-4">
-             <button onclick="goHome()" class="fixed top-24 right-6 z-50 bg-black/50 backdrop-blur px-4 py-2 rounded-full text-white/70 border border-white/10 hover:text-white text-xs uppercase tracking-widest">✕ Close</button>
+        <main id="result-view" class="hidden pb-20 fade-in px-4 pt-6">
+            <button onclick="goHome()" class="fixed top-6 right-6 z-50 bg-white shadow-lg px-4 py-2 rounded-full text-gray-900 font-bold text-xs uppercase tracking-widest border border-gray-100">✕ Close</button>
 
-            <div class="text-center mb-6">
-                <p class="text-[#00f3ff] text-[10px] font-bold uppercase tracking-[0.6em] mb-2">Analysis Complete For</p>
-                <h2 id="final-user-name" class="text-3xl font-bold text-white tracking-tight"></h2>
+            <div class="text-center mb-8 mt-4">
+                <p class="text-indigo-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Analysis Complete For</p>
+                <h2 id="final-user-name" class="text-3xl font-bold text-gray-900"></h2>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Main Element Card -->
-                <div class="lg:col-span-8 luxury-card p-8 relative overflow-hidden">
-                    <div id="element-glow" class="absolute -top-32 -right-32 w-96 h-96 bg-purple-600/30 blur-[120px] rounded-full pointer-events-none"></div>
-                    <div class="relative z-10">
-                        <div class="relative text-center mb-8 p-6 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
-                            <span class="text-fancy text-[10px] font-bold uppercase tracking-[0.4em] block mb-2">My Holy Name</span>
-                            <h1 id="display-name" class="text-5xl font-bold text-white urdu drop-shadow-2xl"></h1>
-                        </div>
-                        <div class="flex flex-col items-center justify-center mb-8 gap-4 text-center">
-                            <div id="winner-icon" class="text-6xl animate-pulse"></div>
-                            <div>
-                                <h2 id="winner-name" class="text-4xl font-bold mb-1 text-fancy"></h2>
-                                <p id="winner-urdu" class="urdu text-xl text-white/60"></p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-6">
-                            <div class="p-4 border border-white/5 bg-white/[0.02] rounded-xl">
-                                <h4 class="text-[#00f3ff] font-bold text-[10px] uppercase mb-2">Strengths</h4>
-                                <p id="qualities-text" class="text-white/80 text-xs leading-relaxed"></p>
-                            </div>
-                            <div class="p-4 border border-white/5 bg-white/[0.02] rounded-xl">
-                                <h4 class="text-[#ff0055] font-bold text-[10px] uppercase mb-2">Challenges</h4>
-                                <p id="challenges-text" class="text-white/80 text-xs leading-relaxed"></p>
-                            </div>
-                        </div>
+
+            <!-- Element Card (Now with Gradient BG inside) -->
+            <div class="luxury-card p-8 mb-6 text-white overflow-hidden relative" style="background: var(--grad-cosmic);">
+                <!-- Glow Effect -->
+                <div id="element-glow" class="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500 blur-[80px] rounded-full opacity-50"></div>
+                
+                <div class="relative z-10 text-center">
+                    <span class="text-white/60 text-[10px] font-bold uppercase tracking-[0.3em] block mb-4">My Holy Name</span>
+                    <h1 id="display-name" class="text-5xl font-bold urdu mb-8"></h1>
+                    
+                    <div class="flex flex-col items-center gap-2 mb-8">
+                        <div id="winner-icon" class="text-6xl mb-2"></div>
+                        <h2 id="winner-name" class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"></h2>
+                        <p id="winner-urdu" class="urdu text-xl text-white/70"></p>
                     </div>
-                </div>
-                <!-- Side Panel -->
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="luxury-card p-6 border-t-4 border-t-[#00f3ff]">
-                        <div class="flex items-center gap-4 mb-4">
-                            <span id="zodiac-icon" class="text-4xl text-[#00f3ff]"></span>
-                            <div>
-                                <h3 id="zodiac-name" class="text-xl font-bold text-fancy"></h3>
-                                <p id="zodiac-date" class="text-[10px] text-[#00f3ff] uppercase tracking-widest"></p>
-                            </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                            <h4 class="text-cyan-400 font-bold text-[10px] uppercase mb-2">Strengths</h4>
+                            <p id="qualities-text" class="text-white/80 text-xs"></p>
                         </div>
-                        <p id="zodiac-personality" class="text-xs text-white/90 leading-relaxed font-semibold mb-2"></p>
-                        <p id="zodiac-singing" class="text-xs text-white/60 leading-relaxed italic"></p>
-                    </div>
-                    <div class="luxury-card p-6 flex flex-col items-center justify-center">
-                        <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 mb-4">Balance</h3>
-                        <div class="w-full h-40 relative">
-                            <canvas id="elementChart"></canvas>
+                        <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                            <h4 class="text-pink-400 font-bold text-[10px] uppercase mb-2">Challenges</h4>
+                            <p id="challenges-text" class="text-white/80 text-xs"></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Abjad -->
-            <div class="luxury-card p-8 border border-emerald-500/20 bg-emerald-900/5">
+            <!-- Zodiac Card -->
+            <div class="luxury-card p-6 mb-6">
+                <div class="flex items-center gap-4 mb-4 border-b border-gray-100 pb-4">
+                    <span id="zodiac-icon" class="text-4xl text-indigo-500"></span>
+                    <div>
+                        <h3 id="zodiac-name" class="text-xl font-bold text-gray-900"></h3>
+                        <p id="zodiac-date" class="text-[10px] text-indigo-500 font-bold uppercase tracking-widest"></p>
+                    </div>
+                </div>
+                <p id="zodiac-personality" class="text-sm text-gray-600 mb-2"></p>
+                <p id="zodiac-singing" class="text-xs text-gray-400 italic"></p>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="luxury-card p-6 mb-6 flex flex-col items-center">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Elemental Balance</h3>
+                <div class="w-full h-48 relative">
+                    <canvas id="elementChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Abjad Card -->
+            <div class="luxury-card p-6 bg-emerald-50 border-emerald-100">
                  <div class="flex items-center justify-between mb-6">
                      <div>
-                         <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-widest block">Numerology</span>
-                         <h3 class="text-2xl text-fancy font-bold">Geometry</h3>
+                         <span class="text-emerald-600 text-[10px] font-bold uppercase tracking-widest block">Numerology</span>
+                         <h3 class="text-xl text-emerald-900 font-bold">Geometry</h3>
                      </div>
-                     <span class="block text-4xl text-emerald-400 font-bold" id="abjad-sum">0</span>
+                     <span class="block text-4xl text-emerald-600 font-bold" id="abjad-sum">0</span>
                  </div>
                  <div id="abjad-matches" class="space-y-3"></div>
             </div>
 
-            <button onclick="goHome()" class="btn-fancy w-full py-4 rounded-xl text-sm">Return Home</button>
+            <button onclick="goHome()" class="btn-fancy w-full py-4 rounded-xl mt-8">Return Dashboard</button>
         </main>
 
     </div>
