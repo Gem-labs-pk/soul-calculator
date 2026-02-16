@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soul Calculator | Premium Edition</title>
+    <title>Soul Calculator | Visual Personality Test</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -238,9 +238,9 @@
                 <div class="slide-card group cursor-pointer" onclick="openApp('intro-view')">
                     <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 z-0"></div>
                     <div class="relative z-10">
-                        <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2 inline-block">New Ritual</span>
-                        <h3 class="text-2xl font-bold mb-1">Soul Matrix V2</h3>
-                        <p class="text-sm opacity-90">Begin your spiritual profiling sequence.</p>
+                        <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-[9px] font-bold uppercase tracking-widest w-fit mb-2 inline-block">New Feature</span>
+                        <h3 class="text-2xl font-bold mb-1">Visual Personality Test</h3>
+                        <p class="text-sm opacity-90">Discover your elemental nature through imagery.</p>
                     </div>
                 </div>
             </div>
@@ -277,8 +277,8 @@
             <button onclick="goHome()" class="mb-6 text-sm font-bold text-gray-400">← Exit</button>
             <div class="luxury-card p-8 text-center">
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl">🔑</div>
-                <h2 class="text-2xl font-bold mb-2">Access Portal</h2>
-                <p class="text-gray-400 text-sm mb-10">Verify your current physical vessel.</p>
+                <h2 class="text-2xl font-bold mb-2">Visual Personality Test</h2>
+                <p class="text-gray-400 text-sm mb-10">Enter your details to begin the visual assessment.</p>
                 <div class="text-left">
                     <div class="input-group">
                         <input type="text" id="reg-name" class="fashion-input" placeholder=" ">
@@ -474,6 +474,33 @@
                     { t: "Meteor Shower", type: "Water", i: "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=300&q=80" },
                     { t: "Aurora Borealis", type: "Air", i: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=300&q=80" },
                     { t: "Solar Eclipse", type: "Earth", i: "https://images.unsplash.com/photo-1532978379173-5cf554a6965e?auto=format&fit=crop&w=300&q=80" }
+                ]
+            },
+            {
+                q: "You find a lost artifact in the sand. What is it?",
+                o: [
+                     { t: "Golden Crown", type: "Fire", i: "https://images.unsplash.com/photo-1605218427306-022ba8c26a42?auto=format&fit=crop&w=300&q=80" },
+                     { t: "Silver Mirror", type: "Water", i: "https://images.unsplash.com/photo-1563205764-6e9352d9a934?auto=format&fit=crop&w=300&q=80" },
+                     { t: "Antique Compass", type: "Air", i: "https://images.unsplash.com/photo-1623864467008-0125c1b6a378?auto=format&fit=crop&w=300&q=80" },
+                     { t: "Bound Book", type: "Earth", i: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" }
+                ]
+            },
+            {
+                q: "A storm approaches. What is your instinct?",
+                o: [
+                    { t: "Command it", type: "Fire", i: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Flow with it", type: "Water", i: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Fly above it", type: "Air", i: "https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Stand firm", type: "Earth", i: "https://images.unsplash.com/photo-1500964757637-c85e8a162699?auto=format&fit=crop&w=300&q=80" }
+                ]
+            },
+            {
+                q: "Which color palette pulls your soul?",
+                o: [
+                    { t: "Crimson Red", type: "Fire", i: "https://images.unsplash.com/photo-1541414779316-956a5084c0d4?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Deep Teal", type: "Water", i: "https://images.unsplash.com/photo-1518063319789-7217e6706b04?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Azure Blue", type: "Air", i: "https://images.unsplash.com/photo-1536514498073-50e69d39c6cf?auto=format&fit=crop&w=300&q=80" },
+                    { t: "Forest Green", type: "Earth", i: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?auto=format&fit=crop&w=300&q=80" }
                 ]
             }
         ];
